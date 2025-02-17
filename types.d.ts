@@ -1,3 +1,5 @@
+import { ZodType } from "zod";
+
 interface Book {
   id: number;
   title: string;
@@ -27,4 +29,11 @@ interface BookListProps {
   title: string;
   books: Book[];
   containerClassName: string;
+}
+
+interface AuthFormProps<T extends FieldValues> {
+  type: "SIGN_IN" | "SIGN_UP";
+  schema: ZodType<T>;
+  onSubmit: (data: T) => Promise<{ success: boolean; error?: string }>;
+  defaultValues: T;
 }
