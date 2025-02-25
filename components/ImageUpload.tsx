@@ -24,6 +24,7 @@ const authenticator = async () => {
     throw new Error(`Authentication request failed :${error.message}`);
   }
 };
+
 const ImageUpload = () => {
   return <ImageKitProvider></ImageKitProvider>;
 };
