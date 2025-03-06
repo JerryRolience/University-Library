@@ -1,15 +1,14 @@
-import config from "@/lib/config";
-import ImageKit from "imagekit";
 import { NextResponse } from "next/server";
-
-const { publicKey, privateKey, urlEndpoint } = config.env.imagekit;
+import ImageKit from "imagekit";
 
 const imagekit = new ImageKit({
-  publicKey,
-  privateKey,
-  urlEndpoint,
+  publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY!,
+  urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URI_ENDPOINT!,
 });
 
 export async function GET() {
-  return NextResponse.json(imagekit.getAuthenticationParameters());
+  const authParams = imagekit.getAuthenticationParameters();
+
+  return NextResponse.json(authParams, { status: 200 });
 }
