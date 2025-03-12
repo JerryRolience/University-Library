@@ -2,19 +2,73 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import React from "react";
-import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Avatar } from "@radix-ui/react-avatar";
+import { AvatarFallback } from "./ui/avatar";
+import { fetchRequest } from "@/lib/api";
+import { toast } from "sonner";
 
 const Header = () => {
   const pathName = usePathname();
+  const router = useRouter();
+  const [user, setUser] = useState<{ name: string } | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetchRequest(
+          "http://localhost:4000/api/auth/me",
+          "GET"
+        );
+
+        if (res.ok) {
+          setUser(res.data);
+        }
+      } catch (error) {
+        toast.error("Failed to fetch user");
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetchRequest(
+        "http://localhost:4000/user/logout",
+        "POST"
+      );
+
+      if (res.ok) {
+        setUser(null);
+        toast.success("Logged out successfully", {
+          style: { backgroundColor: "green", color: "#fff" },
+        });
+        router.replace("/sign-in");
+      } else {
+        toast.error("Logout failed", {
+          description: "Please try again",
+          style: { backgroundColor: "red", color: "#fff" },
+        });
+      }
+    } catch (error) {
+      toast.error("Something went wrong", {
+        description:
+          typeof error === "string" ? error : "An unexpected error occurred",
+        style: { backgroundColor: "red", color: "#fff" },
+      });
+    }
+  };
+
   return (
-    <header className="my-10 flex justify-between gap-5">
+    <header className="my-10 flex justify-between items-center">
       <Link href="/">
         <Image src="/icons/logo.svg" alt="logo" width={40} height={40} />
       </Link>
 
-      <ul className="flex flex-row items-center gap-8">
+      <ul className="flex items-center gap-6">
         <li>
           <Link
             href="/library"
@@ -23,9 +77,43 @@ const Header = () => {
               pathName === "/library" ? "text-light-200 " : "text-light-100"
             )}
           >
-            library
+            Library
           </Link>
         </li>
+
+        {user ? (
+          <>
+            <li>
+              <Link href="/my-profile">
+                <Avatar>
+                  <AvatarFallback className="bg-amber-100 w-8 h-8">
+                    {user.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
+            </li>
+            <li>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+              >
+                Logout
+              </button>
+            </li>
+          </>
+        ) : (
+          <li>
+            <Link
+              href="/sign-in"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+            >
+              Sign In
+            </Link>
+          </li>
+        )}
       </ul>
     </header>
   );

@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,10 +22,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { z } from "zod";
 import Link from "next/link";
 import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
 import ImageUpload from "./ImageUpload";
+import { fetchRequest } from "@/lib/api";
+import { toast } from "sonner";
 
 const AuthForm = <T extends FieldValues>({
   type,
@@ -40,7 +40,32 @@ const AuthForm = <T extends FieldValues>({
     defaultValues: defaultValues as DefaultValues<T>,
   });
 
-  const handleSubmit: SubmitHandler<T> = async (data: T) => {};
+  const handleSubmit: SubmitHandler<T> = async (data: T) => {
+    const uri = isSignIn
+      ? `${process.env.NEXT_PUBLIC_API}/signIn`
+      : `${process.env.NEXT_PUBLIC_API}/signUp`;
+
+    const responseData = await fetchRequest(uri, "POST", data);
+
+    if (!responseData.ok) {
+      toast.error(isSignIn ? "Sign-in failed" : "Sign-up failed", {
+        description:
+          responseData.data?.message ||
+          "Something went wrong, please try again.",
+        style: { backgroundColor: "red", color: "#fff" },
+      });
+      return;
+    }
+
+    toast.success(isSignIn ? "Signed in successfully" : "Sign up successful", {
+      description: isSignIn
+        ? "You have successfully signed in!"
+        : "Your account has been created!",
+      style: { backgroundColor: "green", color: "#fff" },
+    });
+
+    onSubmit(responseData.data);
+  };
 
   return (
     <div className="flex flex-col gap-4">

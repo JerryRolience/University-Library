@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import localFont from "next/font/local";
 import { ReactNode } from "react";
+import { fetchRequest } from "@/lib/api";
 // import { SessionProvider } from "next-auth/react";
 // import { auth } from "@/auth";
 
@@ -28,6 +29,24 @@ export const metadata: Metadata = {
   description:
     "BookWise is a book borrowing university library management solution.",
 };
+
+// const users = await fetchRequest("http://localhost:4000/user/getUsers", "GET");
+// console.log(users);
+
+// const newUser = {
+//   fullName: "John Doe",
+//   email: "john@example.com",
+//   password: "password123",
+//   universityCard: "123456",
+//   role: "USER",
+// };
+
+// const result = await fetchRequest(
+//   "http://localhost:4000/user/signUp",
+//   "POST",
+//   newUser
+// );
+// console.log(result);
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {
   // const session = await auth();

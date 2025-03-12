@@ -34,6 +34,6 @@ interface BookListProps {
 interface AuthFormProps<T extends FieldValues> {
   type: "SIGN_IN" | "SIGN_UP";
   schema: ZodType<T>;
-  onSubmit: (data: T) => Promise<{ success: boolean; error?: string }>;
+  onSubmit: (response) => void;
   defaultValues: T;
 }
