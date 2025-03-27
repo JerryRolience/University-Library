@@ -15,9 +15,8 @@ const page = () => {
         password: "",
       }}
       onSubmit={(response: any) => {
-        console.log("RESPONSE:", response);
         if (response.message === "User signed in successfully") {
-          router.refresh(); // Force Next.js to refresh
+          router.refresh();
           router.push("/");
         }
       }}

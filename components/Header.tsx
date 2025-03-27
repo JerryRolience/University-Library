@@ -19,15 +19,23 @@ const Header = () => {
     const fetchUser = async () => {
       try {
         const res = await fetchRequest(
-          "http://localhost:4000/api/auth/me",
+          `${process.env.NEXT_PUBLIC_API}/api/auth/current-user`,
           "GET"
         );
 
-        if (res.ok) {
+        console.log("res", res);
+        if (res.ok && res.data) {
           setUser(res.data);
+        } else {
+          setUser(null);
         }
       } catch (error) {
-        toast.error("Failed to fetch user");
+        console.error("Error fetching user:", error);
+        setUser(null);
+        toast.error("Failed to fetch user", {
+          description: "Unexpected error occured. Please try again",
+          style: { backgroundColor: "red", color: "#fff" },
+        });
       }
     };
 
@@ -37,8 +45,8 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const res = await fetchRequest(
-        "http://localhost:4000/user/logout",
-        "POST"
+        `${process.env.NEXT_PUBLIC_API}/user/logout`,
+        "GET"
       );
 
       if (res.ok) {
@@ -88,9 +96,11 @@ const Header = () => {
                 <Avatar>
                   <AvatarFallback className="bg-amber-100 w-8 h-8">
                     {user.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
+                      ? user.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                      : "IN"}
                   </AvatarFallback>
                 </Avatar>
               </Link>

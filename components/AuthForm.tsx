@@ -42,8 +42,8 @@ const AuthForm = <T extends FieldValues>({
 
   const handleSubmit: SubmitHandler<T> = async (data: T) => {
     const uri = isSignIn
-      ? `${process.env.NEXT_PUBLIC_API}/signIn`
-      : `${process.env.NEXT_PUBLIC_API}/signUp`;
+      ? `${process.env.NEXT_PUBLIC_API}/user/signIn`
+      : `${process.env.NEXT_PUBLIC_API}/user/signUp`;
 
     const responseData = await fetchRequest(uri, "POST", data);
 

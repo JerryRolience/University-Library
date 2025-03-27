@@ -19,7 +19,6 @@ const page = () => {
         universityCard: "",
       }}
       onSubmit={(response: any) => {
-        console.log(response);
         if (response.message === "User created successfully") {
           router.replace("/sign-in");
         }
