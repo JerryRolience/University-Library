@@ -108,7 +108,10 @@ const Header = () => {
             <li>
               <button
                 onClick={handleLogout}
-                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                className={cn(
+                  "hidden md:block bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600",
+                  pathName === "/my-profile" && " hidden md:hidden lg:hidden"
+                )}
               >
                 Logout
               </button>
@@ -118,7 +121,10 @@ const Header = () => {
           <li>
             <Link
               href="/sign-in"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              className={cn(
+                "bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600",
+                pathName === "/my-profile" && " hidden md:hidden lg:hidden"
+              )}
             >
               Sign In
             </Link>

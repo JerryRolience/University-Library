@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
 import ImageUpload from "./ImageUpload";
@@ -35,6 +35,7 @@ const AuthForm = <T extends FieldValues>({
   onSubmit,
 }: AuthFormProps<T>) => {
   const isSignIn = type === "SIGN_IN";
+  const router = useRouter();
   const form: UseFormReturn<T> = useForm({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
@@ -46,6 +47,16 @@ const AuthForm = <T extends FieldValues>({
       : `${process.env.NEXT_PUBLIC_API}/user/signUp`;
 
     const responseData = await fetchRequest(uri, "POST", data);
+
+    if (responseData.status === 429) {
+      toast.error("Too many requests", {
+        description: "You're trying too fast. Please wait a moment.",
+        style: { backgroundColor: "red", color: "#fff" },
+      });
+
+      router.push("/too-fast");
+      return;
+    }
 
     if (!responseData.ok) {
       toast.error(isSignIn ? "Sign-in failed" : "Sign-up failed", {
