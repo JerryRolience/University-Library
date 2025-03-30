@@ -3,40 +3,62 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
   const authRoutes = ["/sign-in", "/sign-up"];
-  const protectedRoutes = ["/my-profile"];
+  const protectedRoutes = ["/my-profile", "/library", "/settings"];
   const isAuthRoute = authRoutes.includes(req.nextUrl.pathname);
-  const isProtectedRoute = protectedRoutes.includes(req.nextUrl.pathname);
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    req.nextUrl.pathname.startsWith(route)
+  );
 
-  // Call the backend API to validate token
-  const response = await fetch("http://localhost:4000/api/auth/validate", {
-    credentials: "include",
-    headers: {
-      Cookie: req.headers.get("cookie") || "",
-    },
-  });
-
-  const isAuthenticated = response.status === 200;
-
-  // Redirect authenticated users away from auth pages
-  if (isAuthenticated && isAuthRoute) {
-    return NextResponse.redirect(new URL("/", req.url)); // Redirect to homepage
+  if (req.nextUrl.pathname.startsWith("/api")) {
+    return NextResponse.next();
   }
 
-  // Redirect unauthenticated users from protected routes to sign-in
-  if (!isAuthenticated && isProtectedRoute) {
-    return NextResponse.redirect(new URL("/sign-in", req.url));
+  const token =
+    req.cookies.get("token")?.value ||
+    req.headers.get("authorization")?.split(" ")[1];
+
+  let isAuthenticated = false;
+
+  if (token) {
+    try {
+      // Simple client-side expiration check
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      isAuthenticated = Date.now() < payload.exp * 1000;
+
+      if (!isAuthenticated) {
+        const signInUrl = new URL("/sign-in", req.url);
+        signInUrl.searchParams.set("session", "expired");
+        return NextResponse.redirect(signInUrl);
+      }
+
+      // Verify with backend
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API}/api/auth/validate`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      isAuthenticated = response.status === 200;
+    } catch (error) {
+      isAuthenticated = false;
+    }
+  }
+
+  if (isAuthRoute && isAuthenticated) {
+    return NextResponse.redirect(
+      new URL(req.nextUrl.searchParams.get("redirect") || "/", req.url)
+    );
+  }
+
+  if (isProtectedRoute && !isAuthenticated) {
+    const signInUrl = new URL("/sign-in", req.url);
+    signInUrl.searchParams.set("redirect", req.nextUrl.pathname);
+    return NextResponse.redirect(signInUrl);
   }
 
   return NextResponse.next();
 }
-
-export const config = {
-  matcher: [
-    "/",
-    "/my-profile",
-    "/profile/:path*",
-    "/settings/:path*",
-    "/sign-in",
-    "/sign-up",
-  ],
-};

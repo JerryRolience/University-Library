@@ -27,6 +27,9 @@ import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
 import ImageUpload from "./ImageUpload";
 import { fetchRequest } from "@/lib/api";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoadingSpinner } from "./LoadingSpinner";
+import { useState } from "react";
 
 const AuthForm = <T extends FieldValues>({
   type,
@@ -34,6 +37,8 @@ const AuthForm = <T extends FieldValues>({
   defaultValues,
   onSubmit,
 }: AuthFormProps<T>) => {
+  const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const isSignIn = type === "SIGN_IN";
   const router = useRouter();
   const form: UseFormReturn<T> = useForm({
@@ -42,40 +47,54 @@ const AuthForm = <T extends FieldValues>({
   });
 
   const handleSubmit: SubmitHandler<T> = async (data: T) => {
-    const uri = isSignIn
-      ? `${process.env.NEXT_PUBLIC_API}/user/signIn`
-      : `${process.env.NEXT_PUBLIC_API}/user/signUp`;
+    setIsLoading(true);
+    try {
+      const uri = isSignIn
+        ? `${process.env.NEXT_PUBLIC_API}/user/sign-in`
+        : `${process.env.NEXT_PUBLIC_API}/user/sign-up`;
 
-    const responseData = await fetchRequest(uri, "POST", data);
+      const responseData = await fetchRequest(uri, "POST", data);
 
-    if (responseData.status === 429) {
-      toast.error("Too many requests", {
-        description: "You're trying too fast. Please wait a moment.",
-        style: { backgroundColor: "red", color: "#fff" },
-      });
+      if (responseData.status === 429) {
+        toast.error("Too many requests", {
+          description: "You're trying too fast. Please wait a moment.",
+          style: { backgroundColor: "red", color: "#fff" },
+        });
 
-      router.push("/too-fast");
-      return;
+        router.push("/too-fast");
+        return;
+      }
+
+      if (!responseData.ok) {
+        toast.error(isSignIn ? "Sign-in failed" : "Sign-up failed", {
+          description:
+            responseData.data?.message ||
+            "Something went wrong, please try again.",
+          style: { backgroundColor: "red", color: "#fff" },
+        });
+        return;
+      }
+
+      if (isSignIn && responseData.data.accessToken) {
+        login(responseData.data.accessToken, responseData.data.refreshToken, {
+          name: responseData.data.user?.fullName || "User",
+          email: responseData.data.user?.email || "",
+        });
+      }
+      toast.success(
+        isSignIn ? "Signed in successfully" : "Sign up successful",
+        {
+          description: isSignIn
+            ? "You have successfully signed in!"
+            : "Your account has been created!",
+          style: { backgroundColor: "green", color: "#fff" },
+        }
+      );
+
+      onSubmit(responseData.data);
+    } finally {
+      setIsLoading(false);
     }
-
-    if (!responseData.ok) {
-      toast.error(isSignIn ? "Sign-in failed" : "Sign-up failed", {
-        description:
-          responseData.data?.message ||
-          "Something went wrong, please try again.",
-        style: { backgroundColor: "red", color: "#fff" },
-      });
-      return;
-    }
-
-    toast.success(isSignIn ? "Signed in successfully" : "Sign up successful", {
-      description: isSignIn
-        ? "You have successfully signed in!"
-        : "Your account has been created!",
-      style: { backgroundColor: "green", color: "#fff" },
-    });
-
-    onSubmit(responseData.data);
   };
 
   return (
@@ -126,7 +145,18 @@ const AuthForm = <T extends FieldValues>({
             />
           ))}
           <Button type="submit" className="form-btn">
-            {isSignIn ? "Sign In" : "Sign Up"}{" "}
+            {isLoading ? (
+              <div className="flex items-center gap-2">
+                <LoadingSpinner size="sm" className="text-white" />
+                <span>
+                  {isSignIn ? "Signing In..." : "Creating Account..."}
+                </span>
+              </div>
+            ) : isSignIn ? (
+              "Sign In"
+            ) : (
+              "Sign Up"
+            )}
           </Button>
         </form>
       </Form>
