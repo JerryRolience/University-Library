@@ -83,6 +83,10 @@ export default function MyProfile() {
             <h2 className="text-lg font-semibold">Email</h2>
             <p className="text-gray-300">{user?.email || "Not provided"}</p>
           </div>
+          <div>
+            <h2 className="text-lg font-semibold">Role</h2>
+            <p className="text-gray-300">{user?.role || "Not provided"}</p>
+          </div>
         </div>
       </div>
 

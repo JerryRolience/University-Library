@@ -9,22 +9,7 @@ import {
 } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchRequest } from "@/lib/api";
-
-interface User {
-  name: string;
-  email: string;
-}
-
-interface AuthContextType {
-  user: User | null;
-  token: string | null;
-  refreshToken: string | null;
-  login: (token: string, refreshToken: string, userData: User) => Promise<void>;
-  logout: () => Promise<void>;
-  refreshAuth: () => Promise<boolean>;
-  isAuthenticated: boolean;
-  loading: boolean;
-}
+import { AuthContextType, User } from "@/types";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

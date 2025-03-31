@@ -22,6 +22,10 @@ export async function middleware(req: NextRequest) {
   if (token) {
     try {
       // Simple client-side expiration check
+      // JWT structure consists of three parts separated by dots that is header.payload.signature
+      // header: Encodes metadata about the token.payload: Contains claims such as exp (expiration time).signature: Ensures token integrity (not decoded here).
+      //atob() decodes the Base64-encoded payload into a readable string. and JSON.parse() converts the decoded payload string into a JavaScript object.
+
       const payload = JSON.parse(atob(token.split(".")[1]));
       isAuthenticated = Date.now() < payload.exp * 1000;
 

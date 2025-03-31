@@ -79,6 +79,7 @@ const AuthForm = <T extends FieldValues>({
         login(responseData.data.accessToken, responseData.data.refreshToken, {
           name: responseData.data.user?.fullName || "User",
           email: responseData.data.user?.email || "",
+          role: responseData.data.user?.role || "User",
         });
       }
       toast.success(

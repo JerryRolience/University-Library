@@ -37,3 +37,20 @@ interface AuthFormProps<T extends FieldValues> {
   onSubmit: (response) => void;
   defaultValues: T;
 }
+
+interface User {
+  name: string;
+  email: string;
+  role: string;
+}
+
+interface AuthContextType {
+  user: User | null;
+  token: string | null;
+  refreshToken: string | null;
+  login: (token: string, refreshToken: string, userData: User) => Promise<void>;
+  logout: () => Promise<void>;
+  refreshAuth: () => Promise<boolean>;
+  isAuthenticated: boolean;
+  loading: boolean;
+}
