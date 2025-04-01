@@ -62,18 +62,21 @@ export default function Header() {
             <li>
               <Link
                 href="/my-profile"
-                className="hover:opacity-80 transition-opacity"
+                className="hover:opacity-80 transition-opacity flex items-center gap-2 "
               >
-                <Avatar>
-                  <AvatarFallback className="bg-amber-100 w-8 h-8 text-gray-800 font-medium">
+                <Avatar className="w-8 h-8 rounded-full">
+                  <AvatarFallback className="bg-blue-400  text-gray-800 font-medium">
                     {user?.name
                       ? user.name
                           .split(" ")
                           .map((n) => n[0])
                           .join("")
-                      : "IN"}
+                      : "UN"}
                   </AvatarFallback>
                 </Avatar>
+                <p className="text-light-100 font-bold ">
+                  {user?.name ? user?.name.split(" ")[0] : ""}
+                </p>
               </Link>
             </li>
             <li>

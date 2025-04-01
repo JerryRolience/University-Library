@@ -92,7 +92,7 @@ const AuthForm = <T extends FieldValues>({
         }
       );
 
-      onSubmit(responseData.data);
+      onSubmit(responseData.data, data.email, data.fullName);
     } finally {
       setIsLoading(false);
     }
