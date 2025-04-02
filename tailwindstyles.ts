@@ -26,3 +26,8 @@
 // line-clamp-1 → Limits the text to a single line and truncates it with an ellipsis (...) if it overflows.
 
 // line-clamp-2 → Restricts the text to a maximum of two lines, adding an ellipsis if it overflows.
+
+// fomular for aligning items at the center
+// <div className="absolute left-1/2 top-[position] transform -translate-x-1/2">
+//   {/* Your centered element */}
+// </div>

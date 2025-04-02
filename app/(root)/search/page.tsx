@@ -47,7 +47,7 @@ export default function Search() {
   }, [searchQuery]);
 
   return (
-    <main className="container mx-auto px-4 -mt-20">
+    <main className="container mx-auto px-4 py-6 md:-mt-20">
       {/* Hero Search Section */}
       <div className="flex flex-col items-center justify-center min-h-[40vh]">
         <div className="max-w-2xl w-full text-center space-y-4">
@@ -85,10 +85,10 @@ export default function Search() {
       </div>
 
       {/* Book List Section */}
-      <div className="-mt-8">
+      <div className=" mt-12 md:-mt-8">
         {hasSearched && (
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-light-100">
+            <h2 className=" text-xl md:text-2xl font-semibold text-light-100">
               Search Results for{" "}
               <span className="text-light-200">"{searchQuery}"</span>
             </h2>
@@ -105,7 +105,7 @@ export default function Search() {
           <BookList
             title={hasSearched ? "" : "Latest Books"}
             books={searchResults}
-            containerClassName="mt-6"
+            containerClassName="mt-6 "
             variant="medium"
           />
         ) : (
