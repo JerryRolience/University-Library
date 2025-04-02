@@ -45,15 +45,29 @@ export default function Header() {
       <ul className="flex items-center gap-6">
         <li>
           <Link
-            href="/library"
+            href="/"
             className={cn(
               "text-base cursor-pointer capitalize transition-colors",
-              pathname === "/library"
+              pathname === "/home"
                 ? "text-light-200 font-medium"
                 : "text-light-100 hover:text-light-200"
             )}
           >
-            Library
+            Home
+          </Link>
+        </li>
+
+        <li>
+          <Link
+            href="/search"
+            className={cn(
+              "text-base cursor-pointer capitalize transition-colors",
+              pathname === "/search"
+                ? "text-light-200 font-medium"
+                : "text-light-100 hover:text-light-200"
+            )}
+          >
+            Search
           </Link>
         </li>
 

@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { Button } from "./ui";
 import BookCover from "./BookCover";
+import { Book } from "@/types";
 
 const BookOverview = ({
   title,
@@ -31,7 +32,9 @@ const BookOverview = ({
 
           <div className="flex flex-row gap-1">
             <Image src="/icons/star.svg" alt="star" width={22} height={22} />
-            <p>{rating}</p>
+            <p className=" text-light-200">
+              {rating} <span className="text-light-100">/5</span>
+            </p>
           </div>
         </div>
 
@@ -49,7 +52,7 @@ const BookOverview = ({
 
         <Button className="book-overview_btn">
           <Image src="/icons/book.svg" alt="book" width={20} height={20} />
-          <p className="font-bebas-neue text-xl text-dark-100">Borrow</p>
+          <p className="font-bebas-neue text-xl text-dark-100">Borrow Book</p>
         </Button>
       </div>
 
