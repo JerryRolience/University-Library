@@ -1,13 +1,31 @@
 "use client";
 
 import AuthForm from "@/components/AuthForm";
-import config from "@/lib/config";
 import { signUpSchema } from "@/lib/validations";
-import { workflowClient } from "@/lib/workflow";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-const page = () => {
+const SignUpPage = () => {
   const router = useRouter();
+
+  const handleWorkflowTrigger = async (email: string, fullName: string) => {
+    try {
+      const response = await fetch("/api/workflows/onboarding", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, fullName }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to trigger workflow");
+      }
+    } catch (err) {
+      console.error("Workflow trigger error:", err);
+    } finally {
+    }
+  };
 
   return (
     <AuthForm
@@ -20,15 +38,9 @@ const page = () => {
         universityId: "",
         universityCard: "",
       }}
-      onSubmit={(response: any, email: string, fullName: string) => {
+      onSubmit={async (response: any, email: string, fullName: string) => {
         if (response.message === "User created successfully") {
-          workflowClient.trigger({
-            url: `${config.env.prodApiEndpoint}/api/workflows/onboarding`,
-            body: {
-              email,
-              fullName,
-            },
-          });
+          await handleWorkflowTrigger(email, fullName);
           router.replace("/sign-in");
         }
       }}
@@ -36,4 +48,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default SignUpPage;

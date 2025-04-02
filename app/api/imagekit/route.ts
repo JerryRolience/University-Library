@@ -1,3 +1,4 @@
+// app/api/auth/imagekit/route.ts
 import { NextResponse } from "next/server";
 import ImageKit from "imagekit";
 
@@ -7,29 +8,25 @@ const imagekit = new ImageKit({
   urlEndpoint: process.env.NEXT_PUBLIC_IMAGEKIT_URI_ENDPOINT!,
 });
 
-export async function GET(request: Request) {
-  const origin = request.headers.get("origin");
-
-  const authParams = imagekit.getAuthenticationParameters();
-
-  const response = NextResponse.json(authParams);
-
-  // Set CORS headers
-  response.headers.set("Access-Control-Allow-Origin", origin || "*");
-  response.headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
-  response.headers.set("Access-Control-Allow-Headers", "Content-Type");
-
-  return response;
+export async function GET() {
+  try {
+    const authParams = imagekit.getAuthenticationParameters();
+    return NextResponse.json(authParams);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to generate authentication parameters" },
+      { status: 500 }
+    );
+  }
 }
 
-export function OPTIONS() {
-  const response = new NextResponse(null, {
+export async function OPTIONS() {
+  return new NextResponse(null, {
     status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
   });
-
-  response.headers.set("Access-Control-Allow-Origin", "*");
-  response.headers.set("Access-Control-Allow-Methods", "GET, OPTIONS");
-  response.headers.set("Access-Control-Allow-Headers", "Content-Type");
-
-  return response;
 }

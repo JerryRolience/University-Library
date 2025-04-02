@@ -12,7 +12,9 @@ console.log("ImageKit URL Endpoint:", urlEndpoint);
 
 const authenticator = async () => {
   try {
-    const response = await fetch(`${config.env.apiEndpoint}/api/auth/imagekit`);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/imagekit`
+    );
 
     if (!response.ok) {
       const errorText = await response.text();
