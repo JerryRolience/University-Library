@@ -5,16 +5,35 @@ import { Input } from "@/components/ui/input";
 import { sampleBooks } from "@/constants";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Filter } from "lucide-react";
 
 export default function Search() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState(sampleBooks);
   const [hasSearched, setHasSearched] = useState(false);
+  const [filter, setFilter] = useState("all");
+  const [departments, setDepartments] = useState<string[]>([]);
+
+  // Extract unique departments from sample books
+  useEffect(() => {
+    const uniqueDepartments = Array.from(
+      new Set(sampleBooks.map((book) => "General"))
+    );
+    setDepartments(["all", ...uniqueDepartments]);
+  }, []);
 
   // Handle search functionality
   const handleSearch = () => {
     if (searchQuery.trim() === "") {
-      setSearchResults(sampleBooks);
+      applyFilter(sampleBooks, filter);
       setHasSearched(false);
       return;
     }
@@ -26,13 +45,30 @@ export default function Search() {
         book.genre.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    setSearchResults(results);
+    applyFilter(results, filter);
     setHasSearched(true);
+  };
+
+  // Apply department filter
+  const applyFilter = (books: typeof sampleBooks, currentFilter: string) => {
+    if (currentFilter === "all") {
+      setSearchResults(books);
+    } else {
+      const filtered = books.filter((book) => "" === currentFilter);
+      setSearchResults(filtered);
+    }
+  };
+
+  // Handle filter change
+  const handleFilterChange = (value: string) => {
+    setFilter(value);
+    applyFilter(searchQuery.trim() === "" ? sampleBooks : searchResults, value);
   };
 
   // Clear search results
   const clearSearch = () => {
     setSearchQuery("");
+    setFilter("all");
     setSearchResults(sampleBooks);
     setHasSearched(false);
   };
@@ -44,10 +80,10 @@ export default function Search() {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [searchQuery]);
+  }, [searchQuery, filter]);
 
   return (
-    <main className="container mx-auto px-4 py-6 md:-mt-20">
+    <main className="mx-auto px-4 py-6 -mt-20 md:-mt-20 overflow-x-hidden">
       {/* Hero Search Section */}
       <div className="flex flex-col items-center justify-center min-h-[40vh]">
         <div className="max-w-2xl w-full text-center space-y-4">
@@ -55,7 +91,7 @@ export default function Search() {
             Discover your next great read:
           </h3>
 
-          <h1 className="text-5xl font-ibm-plex-sans font-semibold text-light-100 leading-tight">
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-ibm-plex-sans font-semibold text-light-100 leading-tight">
             Explore And Search For{" "}
             <span className="text-primary">Any Book</span> In Our Library
           </h1>
@@ -85,19 +121,46 @@ export default function Search() {
       </div>
 
       {/* Book List Section */}
-      <div className=" mt-12 md:-mt-8">
+      <div className="md:-mt-8 max-w-full">
         {hasSearched && (
-          <div className="flex justify-between items-center mb-6">
-            <h2 className=" text-xl md:text-2xl font-semibold text-light-100">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <h2 className="text-xl md:text-2xl font-semibold text-light-100">
               Search Results for{" "}
               <span className="text-light-200">"{searchQuery}"</span>
             </h2>
-            <button
-              onClick={clearSearch}
-              className="text-primary hover:text-primary-600 transition-colors"
-            >
-              Clear Search
-            </button>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="gap-2 bg-primary hover:bg-dark-100 text-dark-100 hover:text-primary transition-colors ">
+                    <Filter size={16} />
+                    Filter
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuRadioGroup
+                    value={filter}
+                    onValueChange={handleFilterChange}
+                  >
+                    {departments.map((dept) => (
+                      <DropdownMenuRadioItem
+                        key={dept}
+                        value={dept}
+                        className="capitalize"
+                      >
+                        {dept === "all" ? "All Departments" : dept}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button
+                onClick={clearSearch}
+                variant="ghost"
+                className="text-primary hover:text-dark-100 hover:bg-primary transition-colors"
+              >
+                Clear Search
+              </Button>
+            </div>
           </div>
         )}
 
@@ -105,11 +168,11 @@ export default function Search() {
           <BookList
             title={hasSearched ? "" : "Latest Books"}
             books={searchResults}
-            containerClassName="mt-6 "
+            containerClassName="mt-6"
             variant="medium"
           />
         ) : (
-          <div className="text-center py-8">
+          <div className="text-center py-8 px-4">
             <div className="max-w-md mx-auto">
               <Image
                 src="/images/no-results.png"
@@ -126,12 +189,13 @@ export default function Search() {
                 <br />
                 Try using different keywords or check for typos.
               </p>
-              <button
+              <Button
                 onClick={clearSearch}
-                className="w-[360px] h-[48px] bg-primary hover:bg-primary/55 text-dark-300 font-semibold rounded-lg transition-colors"
+                variant="outline"
+                className="not-found-btn"
               >
                 Clear Search
-              </button>
+              </Button>
             </div>
           </div>
         )}

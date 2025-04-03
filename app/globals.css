@@ -85,7 +85,7 @@
 
   /* Book List */
   .book-list {
-    @apply mt-10 flex flex-wrap gap-5 max-xs:justify-between xs:gap-10;
+    @apply mt-10 flex flex-wrap gap-[15px] md:gap-5 max-xs:justify-between xs:gap-10;
   }
 
   /* Book Overview */
@@ -191,7 +191,7 @@
   }
 
   .not-found-btn {
-    @apply bg-primary font-bebas-neue min-w-[360px] mt-6 text-dark-100 text-xl hover:bg-primary/90 min-h-12 !important;
+    @apply bg-primary font-bebas-neue  w-[200px] lg:min-w-[360px] mt-6 text-dark-100 text-xl hover:bg-primary/90 min-h-12 !important;
   }
 
   /* Pagination */

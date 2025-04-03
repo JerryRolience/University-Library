@@ -50,9 +50,9 @@ export default function MyProfile() {
   }
 
   return (
-    <main className="container mx-auto px-4 py-6 md:py-8 flex flex-col xl:flex-row gap-6 xl:gap-8 2xl:gap-12">
+    <main className=" mx-auto lg:px-4 py-6 md:py-8 flex flex-col xl:flex-row gap-6 xl:gap-8 2xl:gap-12">
       {/* User Profile Section */}
-      <div className="w-full relative xl:w-[566px] lg:h-[840px] h-auto bg-gradient-to-b from-dark-300 to-[#12141D] rounded-2xl px-4 py-6 sm:px-6 sm:py-8 lg:p-8 flex flex-col">
+      <div className="w-full relative xl:w-[566px] lg:h-[840px] h-auto bg-gradient-to-b from-dark-300 to-[#12141D] rounded-2xl px-4 py-6  lg:p-8 flex flex-col">
         {/* Profile decoration clip - centered for all screens */}
         <div className="absolute left-1/2 -top-4 transform -translate-x-1/2">
           <div className="relative">
