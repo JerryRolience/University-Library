@@ -72,7 +72,7 @@
   }
 
   .book-cover_medium {
-    @apply w-[144px] h-[199px];
+    @apply w-[134px] md:w-[144px] h-[199px];
   }
 
   .book-cover_regular {
@@ -85,7 +85,7 @@
 
   /* Book List */
   .book-list {
-    @apply mt-10 flex flex-wrap gap-[15px] md:gap-5 max-xs:justify-between xs:gap-10;
+    @apply mt-10 flex flex-wrap gap-5 max-xs:justify-between xs:gap-10;
   }
 
   /* Book Overview */
