@@ -42,6 +42,9 @@ interface User {
   name: string;
   email: string;
   role: string;
+  universityID: string;
+  universityCard: string;
+  status: string;
 }
 
 interface AuthContextType {

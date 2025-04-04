@@ -1,16 +1,61 @@
+import { User } from "@/types";
 import Image from "next/image";
 import { FiEdit2 } from "react-icons/fi";
 import { IoLogOutOutline, IoSettingsOutline } from "react-icons/io5";
+import {
+  FaCheckCircle,
+  FaClock,
+  FaTimesCircle,
+  FaInfoCircle,
+} from "react-icons/fa";
+import { JSX } from "react";
 
 export default function UserProfile({
   user,
   handleLogout,
   isLoggingOut,
 }: {
-  user: { name: string; email: string; role: string } | null;
+  user: User | null;
   handleLogout: () => void;
   isLoggingOut: boolean;
 }) {
+  // Status color mapping
+  const statusConfig: Record<
+    "APPROVED" | "PENDING" | "REJECTED" | "DEFAULT",
+    { bg: string; text: string; label: string; icon: JSX.Element }
+  > = {
+    APPROVED: {
+      bg: "bg-emerald-500/20",
+      text: "text-emerald-400",
+      label: "Verified Student",
+      icon: <FaCheckCircle className="text-emerald-400" size={16} />,
+    },
+    PENDING: {
+      bg: "bg-amber-500/20",
+      text: "text-amber-400",
+      label: "Verification Pending",
+      icon: <FaClock className="text-amber-400" size={16} />,
+    },
+    REJECTED: {
+      bg: "bg-rose-500/20",
+      text: "text-rose-400",
+      label: "Verification Rejected",
+      icon: <FaTimesCircle className="text-rose-400" size={16} />,
+    },
+    DEFAULT: {
+      bg: "bg-blue-500/20",
+      text: "text-blue-400",
+      label: "Account Status",
+      icon: <FaInfoCircle className="text-blue-400" size={16} />,
+    },
+  };
+
+  const currentStatus: "APPROVED" | "PENDING" | "REJECTED" | "DEFAULT" =
+    (user?.status as "APPROVED" | "PENDING" | "REJECTED" | "DEFAULT") ||
+    "DEFAULT";
+  const { bg, text, label, icon } = statusConfig[currentStatus];
+  statusConfig[currentStatus] || statusConfig.DEFAULT;
+
   return (
     <div className="w-full relative xl:w-[566px] lg:h-[840px] h-auto bg-gradient-to-b from-dark-300 to-[#12141D] rounded-2xl px-4 py-6  lg:p-8 flex flex-col">
       {/* Profile decoration clip - centered for all screens */}
@@ -33,7 +78,7 @@ export default function UserProfile({
           <div className="relative w-20 h-20 sm:w-24 sm:h-24 min-w-[5rem] sm:min-w-[6rem] rounded-full border-[4px] sm:border-[6px] border-dark-300 overflow-hidden">
             <Image
               src={"/images/test-user.jpg"}
-              alt={`Profile picture of ${user?.name || "user"}`}
+              alt={`Profile picture of ${user?.name}`}
               fill
               className="object-cover"
               priority
@@ -42,20 +87,18 @@ export default function UserProfile({
 
           <div className="flex-1 flex flex-col gap-1 sm:gap-2">
             <div className="flex items-center gap-2">
-              <Image
-                src="/images/Vector.png"
-                alt="Verified badge"
-                width={16}
-                height={16}
-                aria-hidden="true"
-              />
-              <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full">
-                Verified Student
-              </span>
+              <div className="flex items-center gap-1">
+                {icon}
+                <span
+                  className={`text-xs ${bg} ${text} px-2 py-1 rounded-full`}
+                >
+                  {label}
+                </span>
+              </div>
             </div>
 
             <h1 className="text-xl sm:text-2xl font-bold text-light-100">
-              {user?.name || "Jerry Rolience"}
+              {user?.name || "Name not provided"}
             </h1>
             <p className="text-sm sm:text-base text-light-100">
               {user?.email || "Email not provided"}
@@ -79,7 +122,7 @@ export default function UserProfile({
               University ID Number
             </h2>
             <p className="text-sm sm:text-base text-light-100">
-              {user?.role || "Not provided"}
+              {user?.universityID || "Not provided"}
             </p>
           </div>
         </div>

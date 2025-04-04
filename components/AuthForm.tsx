@@ -77,9 +77,12 @@ const AuthForm = <T extends FieldValues>({
 
       if (isSignIn && responseData.data.accessToken) {
         login(responseData.data.accessToken, responseData.data.refreshToken, {
-          name: responseData.data.user?.fullName || "User",
-          email: responseData.data.user?.email || "",
-          role: responseData.data.user?.role || "User",
+          name: responseData.data.user?.name,
+          email: responseData.data.user?.email,
+          role: responseData.data.user?.role,
+          status: responseData.data.user?.status,
+          universityCard: responseData.data.user?.universityCard,
+          universityID: responseData.data.user?.universityID,
         });
       }
       toast.success(
