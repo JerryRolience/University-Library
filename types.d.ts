@@ -16,6 +16,26 @@ interface Book {
   isLoanedBook?: boolean;
 }
 
+interface DataBaseBooks {
+  _id: string;
+  id: string;
+  title: string;
+  author: string;
+  genre: string;
+  rating: number;
+  totalCopies: number;
+  availableCopies: number;
+  description: string;
+  coverColor: string;
+  coverUrl: string;
+  videoUrl: string;
+  summary: string;
+  del?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+  isLoanedBook?: boolean;
+}
+
 type BookCoverVariant = "extraSmall" | "small" | "medium" | "regular" | "wide";
 
 interface BookCoverProps {
@@ -27,7 +47,7 @@ interface BookCoverProps {
 
 interface BookListProps {
   title: string;
-  books: Book[];
+  books: DataBaseBooks[];
   containerClassName: string;
 }
 
@@ -36,6 +56,20 @@ interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
   onSubmit: (response, email, fullName) => void;
   defaultValues: T;
+}
+
+interface BookFormProps extends Partial<Book> {
+  type: "create" | "update";
+}
+
+interface FileUploadProps {
+  type: "image" | "video";
+  accept: string;
+  placeholder: string;
+  folder: string;
+  variant: "dark" | "light";
+  value?: string;
+  onFileChange: (filePath: string) => void;
 }
 
 interface User {
@@ -50,6 +84,11 @@ interface User {
 interface AuthContextType {
   user: User | null;
   token: string | null;
+  books: DataBaseBooks[] | null;
+  books: Book[];
+  loadingBooks: boolean;
+  errorBooks: string | null;
+  fetchBooks: () => Promise<void>;
   refreshToken: string | null;
   login: (token: string, refreshToken: string, userData: User) => Promise<void>;
   logout: () => Promise<void>;

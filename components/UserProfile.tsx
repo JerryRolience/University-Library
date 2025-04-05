@@ -85,6 +85,7 @@ export default function UserProfile({
             />
           </div>
 
+          {/* User Name and Status */}
           <div className="flex-1 flex flex-col gap-1 sm:gap-2">
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">

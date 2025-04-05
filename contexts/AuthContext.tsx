@@ -6,20 +6,56 @@ import {
   useEffect,
   useState,
   ReactNode,
+  useCallback,
 } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchRequest } from "@/lib/api";
-import { AuthContextType, User } from "@/types";
+import { AuthContextType, DataBaseBooks, User } from "@/types";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [books, setBooks] = useState<DataBaseBooks[]>([]);
+  const [loadingBooks, setLoadingBooks] = useState(false);
+  const [errorBooks, setErrorBooks] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const fetchBooks = useCallback(async () => {
+    setLoadingBooks(true);
+    setErrorBooks(null);
+    try {
+      const response = await fetchRequest(
+        `${process.env.NEXT_PUBLIC_API}/book/get-books`,
+        "GET",
+        undefined,
+        token
+      );
+
+      if (response.ok) {
+        setBooks(response.data || []);
+      } else {
+        setErrorBooks(response.data?.message || "Failed to load books");
+      }
+    } catch (error) {
+      setErrorBooks("An unexpected error occurred");
+      console.error("Failed to fetch books:", error);
+    } finally {
+      setLoadingBooks(false);
+    }
+  }, [token]);
+  // Fetch books when token changes (user logs in)
+  useEffect(() => {
+    if (token) {
+      fetchBooks();
+    } else {
+      setBooks([]);
+    }
+  }, []);
 
   const isTokenExpired = (token: string) => {
     try {
@@ -171,6 +207,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     user,
     token,
+    books,
+    loadingBooks,
+    errorBooks,
+    fetchBooks,
     refreshToken,
     login,
     logout,

@@ -1,6 +1,6 @@
 import React from "react";
 import BookCard from "./BookCard";
-import { Book, BookCoverVariant, BookListProps } from "@/types";
+import { Book, BookCoverVariant, BookListProps, DataBaseBooks } from "@/types";
 import { cn } from "@/lib/utils";
 
 const BookList = ({
@@ -9,6 +9,7 @@ const BookList = ({
   containerClassName,
   variant,
 }: BookListProps & { variant?: BookCoverVariant }) => {
+  if (books.length < 2) return;
   return (
     <section className={containerClassName}>
       <h2
@@ -23,7 +24,7 @@ const BookList = ({
       </h2>
 
       <ul className="book-list">
-        {books.map((book: Book) => (
+        {books.map((book: DataBaseBooks) => (
           <BookCard key={book.title} {...book} variant={variant} />
         ))}
       </ul>

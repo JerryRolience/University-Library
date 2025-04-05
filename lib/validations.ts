@@ -1,11 +1,50 @@
 import { z } from "zod";
 
+// Common password validation reusable across schemas
+const passwordValidation = z
+  .string()
+  .min(8, "Password must be at least 8 characters long")
+  .max(64, "Password cannot exceed 64 characters")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number")
+  .regex(
+    /[^A-Za-z0-9]/,
+    "Password must contain at least one special character (e.g., !@#$%^&*)"
+  )
+  .refine(
+    (password) => !password.includes(" "),
+    "Password cannot contain spaces"
+  );
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const universityIdRegex = /^[A-Z]{3}\/\d{4}\/\d{2}$/;
 export const signUpSchema = z.object({
-  fullName: z.string().min(3),
-  email: z.string().email(),
-  universityId: z.string().min(5),
-  universityCard: z.string().nonempty("University Card is required"),
-  password: z.string().min(8),
+  fullName: z
+    .string()
+    .min(3, "Full name must be at least 3 characters")
+    .max(50, "Full name cannot exceed 50 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  universityId: z.string().refine(
+    (val) => {
+      // Basic format check
+      const formatValid = /^[A-Z]{3}\/\d{4}\/\d{2}$/.test(val);
+      if (!formatValid) return false;
+
+      // Extract year portion
+      const yearPart = val.split("/")[2];
+      const fullYear = 2000 + parseInt(yearPart);
+
+      // Year range check (2020-2030)
+      return fullYear >= 2020 && fullYear <= 2030;
+    },
+    {
+      message:
+        "University ID must be in format: ABC/1234/20-30 (where last digits represent year 2020-2030)",
+    }
+  ),
+  universityCard: z.string().nonempty("University card image is required"),
+  password: passwordValidation,
 });
 
 export const signInSchema = z.object({

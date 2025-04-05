@@ -10,7 +10,6 @@ import {
   useForm,
   UseFormReturn,
 } from "react-hook-form";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -24,12 +23,12 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
-import ImageUpload from "./ImageUpload";
 import { fetchRequest } from "@/lib/api";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { useState } from "react";
+import FileUpload from "./FileUpload";
 
 const AuthForm = <T extends FieldValues>({
   type,
@@ -41,6 +40,7 @@ const AuthForm = <T extends FieldValues>({
   const [isLoading, setIsLoading] = useState(false);
   const isSignIn = type === "SIGN_IN";
   const router = useRouter();
+
   const form: UseFormReturn<T> = useForm({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
@@ -60,7 +60,6 @@ const AuthForm = <T extends FieldValues>({
           description: "You're trying too fast. Please wait a moment.",
           style: { backgroundColor: "red", color: "#fff" },
         });
-
         router.push("/too-fast");
         return;
       }
@@ -85,6 +84,7 @@ const AuthForm = <T extends FieldValues>({
           universityID: responseData.data.user?.universityID,
         });
       }
+
       toast.success(
         isSignIn ? "Signed in successfully" : "Sign up successful",
         {
@@ -104,15 +104,14 @@ const AuthForm = <T extends FieldValues>({
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-semibold text-white">
-        {isSignIn
-          ? "Welcome back to BookWise "
-          : " Create your library account"}
+        {isSignIn ? "Welcome back to BookWise" : "Create your library account"}
       </h1>
       <p className="text-light-100">
         {isSignIn
           ? "Access the vast collection of resources, and stay updated"
           : "Please complete all fields and upload a valid university ID to gain access to the library"}
       </p>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -130,7 +129,14 @@ const AuthForm = <T extends FieldValues>({
                   </FormLabel>
                   <FormControl>
                     {field.name === "universityCard" ? (
-                      <ImageUpload onFileChange={field.onChange} />
+                      <FileUpload
+                        onFileChange={field.onChange}
+                        type="image"
+                        accept="image/*"
+                        placeholder="Upload your ID"
+                        folder="ids"
+                        variant="dark"
+                      />
                     ) : (
                       <Input
                         required
@@ -142,13 +148,29 @@ const AuthForm = <T extends FieldValues>({
                       />
                     )}
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
           ))}
-          <Button type="submit" className="form-btn">
+
+          {!isSignIn && (
+            <div className="text-sm text-muted-foreground p-4 bg-dark-300 rounded-lg">
+              <p className="font-medium mb-2">Password Requirements:</p>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>8-64 characters</li>
+                <li>Uppercase and lowercase letters</li>
+                <li>At least one number</li>
+                <li>At least one special character</li>
+              </ul>
+            </div>
+          )}
+
+          <Button
+            type="submit"
+            className="form-btn w-full"
+            disabled={isLoading}
+          >
             {isLoading ? (
               <div className="flex items-center gap-2">
                 <LoadingSpinner size="sm" className="text-white" />
@@ -166,12 +188,11 @@ const AuthForm = <T extends FieldValues>({
       </Form>
 
       <p className="text-center text-base font-medium">
-        {isSignIn ? "New to BookWise? " : "Already have an account? "}{" "}
+        {isSignIn ? "New to BookWise? " : "Already have an account? "}
         <Link
-          href={isSignIn ? "/sign-up" : "sign-in"}
-          className="font-bold text-primary"
+          href={isSignIn ? "/sign-up" : "/sign-in"}
+          className="font-bold text-primary hover:text-primary/80 transition-colors"
         >
-          {" "}
           {isSignIn ? "Create an account" : "Sign In"}
         </Link>
       </p>

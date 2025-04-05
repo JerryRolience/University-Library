@@ -27,53 +27,67 @@ export function BookListSection({
   filter: string;
   departments: string[];
 }) {
+  const showFilter = searchResults.length > 0 || !hasSearched;
+
   return (
     <div className="md:-mt-8 max-w-full">
-      {hasSearched && (
+      {(hasSearched || showFilter) && (
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <h2 className="text-xl md:text-2xl font-semibold text-light-100">
-            Search Results for{" "}
-            <span className="text-light-200">"{searchQuery}"</span>
-          </h2>
-          <div className="flex gap-2 w-full sm:w-auto">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="gap-2 bg-primary hover:bg-dark-100 text-dark-100 hover:text-primary transition-colors ">
-                  <Filter size={16} />
-                  Filter
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuRadioGroup
-                  value={filter}
-                  onValueChange={handleFilterChange}
+          {hasSearched ? (
+            <h2 className="text-xl md:text-2xl font-semibold text-light-100">
+              Search Results for{" "}
+              <span className="text-light-200">"{searchQuery}"</span>
+            </h2>
+          ) : (
+            <h2 className="text-xl md:text-2xl font-semibold text-light-100">
+              Browse Books
+            </h2>
+          )}
+
+          {showFilter && (
+            <div className="flex gap-2 w-full sm:w-auto">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="gap-2 bg-primary hover:bg-dark-100 text-dark-100 hover:text-primary transition-colors">
+                    <Filter size={16} />
+                    Filter
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuRadioGroup
+                    value={filter}
+                    onValueChange={handleFilterChange}
+                  >
+                    {departments.map((dept) => (
+                      <DropdownMenuRadioItem
+                        key={dept}
+                        value={dept}
+                        className="capitalize"
+                      >
+                        {dept === "all" ? "All Departments" : dept}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {hasSearched && (
+                <Button
+                  onClick={clearSearch}
+                  variant="ghost"
+                  className="text-primary hover:text-dark-100 hover:bg-primary transition-colors"
                 >
-                  {departments.map((dept) => (
-                    <DropdownMenuRadioItem
-                      key={dept}
-                      value={dept}
-                      className="capitalize"
-                    >
-                      {dept === "all" ? "All Departments" : dept}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button
-              onClick={clearSearch}
-              variant="ghost"
-              className="text-primary hover:text-dark-100 hover:bg-primary transition-colors"
-            >
-              Clear Search
-            </Button>
-          </div>
+                  Clear Search
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       )}
 
       {searchResults.length > 0 ? (
         <BookList
-          title={hasSearched ? "" : "Latest Books"}
+          title={""}
           books={searchResults}
           containerClassName="mt-6"
           variant="medium"
@@ -89,20 +103,22 @@ export function BookListSection({
               className="mx-auto mb-6"
             />
             <h3 className="text-2xl font-semibold text-white mb-3">
-              No Results Found
+              {hasSearched ? "No Results Found" : "No Books Available"}
             </h3>
             <p className="text-light-100 mb-6">
-              We couldn't find any books matching your search.
-              <br />
-              Try using different keywords or check for typos.
+              {hasSearched
+                ? "We couldn't find any books matching your search. Try using different keywords or check for typos."
+                : "There are currently no books in this category."}
             </p>
-            <Button
-              onClick={clearSearch}
-              variant="outline"
-              className="not-found-btn"
-            >
-              Clear Search
-            </Button>
+            {hasSearched && (
+              <Button
+                onClick={clearSearch}
+                variant="outline"
+                className="not-found-btn"
+              >
+                Clear Search
+              </Button>
+            )}
           </div>
         </div>
       )}
