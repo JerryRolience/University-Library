@@ -1,10 +1,10 @@
 // app/book/[id]/page.tsx
 import { fetchRequest } from "@/lib/api";
 import { DataBaseBooks } from "@/types";
-import BookDetails from "@/components/BookDetailsPage";
+import BookDetails from "@/components/Books/BookDetailsPage";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const { id } = params;
+  const { id } = await params;
   const uri = `${process.env.NEXT_PUBLIC_API}/book/get-book`;
 
   try {

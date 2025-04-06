@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { useState } from "react";
 
-export default function Header() {
+export function HomeHeader() {
   const pathname = usePathname();
   const { user, isAuthenticated, loading, logout } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);

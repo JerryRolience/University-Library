@@ -2,8 +2,8 @@
 
 import { sampleBooks } from "@/constants";
 import { useState, useEffect } from "react";
-import { SearchHeroSection } from "@/components/SearchHeroSection";
-import { BookListSection } from "@/components/BookListSection";
+import { SearchHeroSection } from "@/components/home/SearchHeroSection";
+import { BookListSection } from "@/components/Books/BookListSection";
 
 export default function Search() {
   const [searchQuery, setSearchQuery] = useState("");

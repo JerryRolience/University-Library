@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { Button } from "./ui";
+import { Button } from "../ui";
 import BookCover from "./BookCover";
 import { Book, DataBaseBooks } from "@/types";
 import { BorrowBook } from "./BorrowBook";

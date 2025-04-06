@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 
 export function SearchHeroSection({
   searchQuery,

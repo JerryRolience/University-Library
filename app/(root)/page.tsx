@@ -1,8 +1,8 @@
 // app/page.tsx
 "use client";
 
-import BookList from "@/components/BookList";
-import BookOverview from "@/components/BookOverview";
+import BookList from "@/components/Books/BookList";
+import BookOverview from "@/components/Books/BookOverview";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import { toast } from "sonner";

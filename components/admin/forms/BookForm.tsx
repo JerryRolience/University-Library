@@ -17,7 +17,7 @@ import { z } from "zod";
 import { bookSchema } from "@/lib/validations";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui";
-import FileUpload from "@/components/FileUpload";
+import FileUpload from "@/components/home/FileUpload";
 import ColorPicker from "../ColorPicker";
 import { fetchRequest } from "@/lib/api";
 import { toast } from "sonner";

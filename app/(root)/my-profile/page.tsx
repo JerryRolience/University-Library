@@ -1,13 +1,13 @@
 "use client";
 
-import { LoadingSpinner, LoadingPage } from "@/components/LoadingSpinner";
+import { LoadingSpinner, LoadingPage } from "@/components/home/LoadingSpinner";
 import { sampleBooks } from "@/constants";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import UserProfile from "@/components/UserProfile";
-import { BorrowedBookSection } from "@/components/BorrowedBookSection";
+import UserProfile from "@/components/my-profile/UserProfile";
+import { BorrowedBookSection } from "@/components/my-profile/BorrowedBookSection";
 
 export default function MyProfile() {
   const { user, isAuthenticated, loading, logout } = useAuth();
@@ -64,7 +64,7 @@ export default function MyProfile() {
       />
 
       {/* Borrowed Books Section */}
-      <BorrowedBookSection sampleBooks={sampleBooks} />
+      <BorrowedBookSection />
     </main>
   );
 }

@@ -96,3 +96,41 @@ interface AuthContextType {
   isAuthenticated: boolean;
   loading: boolean;
 }
+
+interface BorrowRecord {
+  _id: string;
+  bookId: string;
+  borrowDate: string;
+  dueDate: string;
+  status: string;
+}
+
+interface BookDetail {
+  _id: string;
+  id: string;
+  title: string;
+  author: string;
+  genre: string;
+  coverUrl: string;
+  coverColor: string;
+  rating: number;
+  description: string;
+}
+
+interface BorrowedBook {
+  borrowRecord: BorrowRecord;
+  bookDetail: BookDetail;
+}
+
+interface Pagination {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+}
+
+interface BorrowedBooksResponse {
+  success: boolean;
+  data: BorrowedBook[];
+  pagination: Pagination;
+}

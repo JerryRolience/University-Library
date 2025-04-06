@@ -1,6 +1,6 @@
 "use client";
 
-import AuthForm from "@/components/AuthForm";
+import AuthForm from "@/components/home/AuthForm";
 import { signUpSchema } from "@/lib/validations";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

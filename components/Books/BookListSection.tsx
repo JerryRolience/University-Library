@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
-import BookList from "@/components/BookList";
+import BookList from "@/components/Books/BookList";
 import Image from "next/image";
 
 export function BookListSection({

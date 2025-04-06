@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "@/components/Header";
+import { HomeHeader } from "@/components/home";
 import { ReactNode, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { fetchRequest } from "@/lib/api";
@@ -32,7 +32,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <main className="root-container">
       <div className="mx-auto max-w-7xl">
-        <Header />
+        <HomeHeader />
         <div className="mt-20 pb-20">{children}</div>
       </div>
     </main>

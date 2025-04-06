@@ -9,6 +9,8 @@ import {
   FaInfoCircle,
 } from "react-icons/fa";
 import { JSX } from "react";
+import { IKImage } from "imagekitio-next";
+import config from "@/lib/config";
 
 export default function UserProfile({
   user,
@@ -130,12 +132,17 @@ export default function UserProfile({
 
         {/* ID Card */}
         <div className="mt-4">
-          <div className="relative w-full aspect-[486/287]">
-            <Image
-              src="/images/image.png"
+          <div className="relative w-full aspect-[486/287] rounded-md overflow-hidden">
+            <IKImage
+              path={user?.universityCard}
+              urlEndpoint={config.env.imagekit.urlEndpoint}
               alt="Student identification card"
               fill
-              className="object-cover rounded-md"
+              className="object-cover"
+              loading="lazy"
+              style={{
+                objectPosition: " center bottom",
+              }}
             />
           </div>
         </div>

@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { fetchRequest } from "@/lib/api";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { LoadingSpinner } from "./LoadingSpinner";
+import { LoadingSpinner } from "../home/LoadingSpinner";
 
 export function BorrowBook({ bookId }: { bookId: string }) {
   const router = useRouter();
