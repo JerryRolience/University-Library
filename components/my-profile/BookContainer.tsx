@@ -18,7 +18,7 @@ export default function BookContainer({ item }: { item: BorrowedBook }) {
     >
       <div className="flex justify-between items-start">
         <span
-          className={`${getStatusColor(status)} text-xs px-2 py-1 rounded-full`}
+          className={`${getStatusColor(status)} text-xs px-2 py-1 rounded-md`}
         >
           {status}
         </span>
