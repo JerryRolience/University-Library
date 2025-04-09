@@ -11,15 +11,20 @@ import {
 import { JSX } from "react";
 import { IKImage } from "imagekitio-next";
 import config from "@/lib/config";
+import { FaUserEdit } from "react-icons/fa";
 
 export default function UserProfile({
   user,
   handleLogout,
   isLoggingOut,
+  handleProfileEdit,
+  handleProfilePicEdit,
 }: {
   user: User | null;
   handleLogout: () => void;
   isLoggingOut: boolean;
+  handleProfileEdit: () => void;
+  handleProfilePicEdit: () => void;
 }) {
   // Status color mapping
   const statusConfig: Record<
@@ -77,14 +82,24 @@ export default function UserProfile({
       <div className="flex flex-col gap-6 md:gap-8 pt-16 flex-1">
         {/* User Profile Header */}
         <div className="flex flex-row items-start gap-4 sm:gap-6">
-          <div className="relative w-20 h-20 sm:w-24 sm:h-24 min-w-[5rem] sm:min-w-[6rem] rounded-full border-[4px] sm:border-[6px] border-dark-300 overflow-hidden">
-            <Image
-              src={"/images/test-user.jpg"}
-              alt={`Profile picture of ${user?.name}`}
-              fill
-              className="object-cover"
-              priority
-            />
+          <div className="relative w-20 h-20 bg-dark-100 sm:w-24 sm:h-24 min-w-[5rem] sm:min-w-[6rem] rounded-full border-[4px] sm:border-[6px] border-dark-300 overflow-hidden">
+            {user?.profilePic ? (
+              <IKImage
+                path={user?.profilePic}
+                urlEndpoint={config.env.imagekit.urlEndpoint}
+                alt={`Profile picture of ${user?.name}`}
+                fill
+                className="object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <div className="text-white items-center text-lg p-7">
+                {user?.name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              </div>
+            )}
           </div>
 
           {/* User Name and Status */}
@@ -97,6 +112,13 @@ export default function UserProfile({
                 >
                   {label}
                 </span>
+              </div>
+              <div className="ml-4 ">
+                <FaUserEdit
+                  color="#E7C9A5"
+                  size={24}
+                  onClick={handleProfilePicEdit}
+                />
               </div>
             </div>
 
@@ -152,6 +174,7 @@ export default function UserProfile({
           <button
             className="flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-dark-400 hover:bg-dark-500 rounded-lg text-light-100 transition-colors text-sm sm:text-base"
             aria-label="Edit profile"
+            onClick={handleProfileEdit}
           >
             <FiEdit2 size={16} className="shrink-0" />
             <span className="truncate">Edit Profile</span>

@@ -1,3 +1,4 @@
+import { profile } from "console";
 import { z } from "zod";
 
 // Common password validation reusable across schemas
@@ -17,8 +18,6 @@ const passwordValidation = z
     "Password cannot contain spaces"
   );
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const universityIdRegex = /^[A-Z]{3}\/\d{4}\/\d{2}$/;
 export const signUpSchema = z.object({
   fullName: z
     .string()
@@ -45,6 +44,37 @@ export const signUpSchema = z.object({
   ),
   universityCard: z.string().nonempty("University card image is required"),
   password: passwordValidation,
+});
+
+export const editProfileSchema = z.object({
+  fullName: z
+    .string()
+    .min(3, "Full name must be at least 3 characters")
+    .max(50, "Full name cannot exceed 50 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  universityId: z.string().refine(
+    (val) => {
+      // Basic format check
+      const formatValid = /^[A-Z]{3}\/\d{4}\/\d{2}$/.test(val);
+      if (!formatValid) return false;
+
+      // Extract year portion
+      const yearPart = val.split("/")[2];
+      const fullYear = 2000 + parseInt(yearPart);
+
+      // Year range check (2020-2030)
+      return fullYear >= 2020 && fullYear <= 2030;
+    },
+    {
+      message:
+        "University ID must be in format: ABC/1234/20-30 (where last digits represent year 2020-2030)",
+    }
+  ),
+  universityCard: z.string().nonempty("University card image is required"),
+});
+
+export const editProfilePicSchema = z.object({
+  profilePic: z.string().nonempty("Profile picture is required"),
 });
 
 export const signInSchema = z.object({

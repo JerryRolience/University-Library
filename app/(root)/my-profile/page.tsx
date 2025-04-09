@@ -1,24 +1,35 @@
 "use client";
 
 import { LoadingSpinner, LoadingPage } from "@/components/home/LoadingSpinner";
-import { sampleBooks } from "@/constants";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import UserProfile from "@/components/my-profile/UserProfile";
 import { BorrowedBookSection } from "@/components/my-profile/BorrowedBookSection";
+import { UserProfileDialog } from "@/components/UserProfileDialog";
+import { ProfilePicDialog } from "@/components/ProfilePicDialog";
 
 export default function MyProfile() {
   const { user, isAuthenticated, loading, logout } = useAuth();
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isEditPicDialogOpen, setIsEditPicDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.push(`/sign-in`);
     }
   }, [isAuthenticated, loading, router]);
+
+  const handleProfileEdit = () => {
+    setIsEditDialogOpen(true);
+  };
+
+  const handleProfilePicEdit = () => {
+    setIsEditPicDialogOpen(true);
+  };
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
@@ -61,6 +72,21 @@ export default function MyProfile() {
         user={user}
         handleLogout={handleLogout}
         isLoggingOut={isLoggingOut}
+        handleProfileEdit={handleProfileEdit}
+        handleProfilePicEdit={handleProfilePicEdit}
+      />
+
+      <ProfilePicDialog
+        isOpen={isEditPicDialogOpen}
+        onOpenChange={setIsEditPicDialogOpen}
+        user={user}
+      />
+
+      {/* Edit Profile Dialog */}
+      <UserProfileDialog
+        isOpen={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        user={user}
       />
 
       {/* Borrowed Books Section */}

@@ -151,6 +151,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await router.push(redirect);
   };
 
+  const editProfile = async (userData: User) => {
+    setUser(userData);
+  };
+
+  const editProfilePic = async (userData: User) => {
+    setUser(userData);
+  };
+
   const clearAuth = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
@@ -215,6 +223,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     login,
     logout,
     refreshAuth,
+    editProfile,
+    editProfilePic,
     isAuthenticated: !!token && !isTokenExpired(token),
     loading,
   };

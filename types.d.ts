@@ -55,7 +55,18 @@ interface AuthFormProps<T extends FieldValues> {
   type: "SIGN_IN" | "SIGN_UP";
   schema: ZodType<T>;
   onSubmit: (response, email, fullName) => void;
+  defaultValues: T & { profilePic?: string };
+}
+
+interface EditProfileFormProps<T extends FieldValues> {
+  schema: ZodType<T>;
+  onSubmit: (response) => void;
   defaultValues: T;
+}
+interface EditProfilePicFormProps<T extends FieldValues> {
+  schema: ZodType<T>;
+  onSubmit: (response) => void;
+  defaultValues: T & { profilePic?: string };
 }
 
 interface BookFormProps extends Partial<Book> {
@@ -78,6 +89,7 @@ interface User {
   role: string;
   universityID: string;
   universityCard: string;
+  profilePic?: string;
   status: string;
 }
 
@@ -90,6 +102,8 @@ interface AuthContextType {
   errorBooks: string | null;
   fetchBooks: () => Promise<void>;
   refreshToken: string | null;
+  editProfile: (data: User) => Promise<void>;
+  editProfilePic: (data: User) => Promise<void>;
   login: (token: string, refreshToken: string, userData: User) => Promise<void>;
   logout: () => Promise<void>;
   refreshAuth: () => Promise<boolean>;
