@@ -1,3 +1,4 @@
+import { DropdownOption } from "@/types";
 import { differenceInDays, format } from "date-fns";
 
 export function calculateDaysLeft(dueDateString: string) {
@@ -26,3 +27,36 @@ export const getStatusColor = (status: string) => {
       return "bg-gray-500";
   }
 };
+
+export const formatDate = (date: string | Date | null | undefined): string => {
+  if (!date) return "N/A";
+  const d = new Date(date);
+  return d
+    .toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    })
+    .replace(",", "");
+};
+
+export const bookStatusOptions: DropdownOption[] = [
+  {
+    value: "Borrowed",
+    label: "Borrowed",
+    colorClass: "text-[#7c3aed] ",
+    backgroundColor: "bg-[#ede9fe]",
+  },
+  {
+    value: "Returned",
+    label: "Returned",
+    colorClass: "text-[#0284c7]  ",
+    backgroundColor: "bg-[#e0f2fe]",
+  },
+  {
+    value: "Late Return",
+    label: "Late Return",
+    colorClass: "text-[#e11d48] ",
+    backgroundColor: "bg-[#ffe4e6]",
+  },
+];

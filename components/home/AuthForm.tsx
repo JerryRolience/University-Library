@@ -82,6 +82,7 @@ const AuthForm = <T extends FieldValues>({
           status: responseData.data.user?.status,
           universityCard: responseData.data.user?.universityCard,
           universityID: responseData.data.user?.universityID,
+          profilePic: responseData.data.user?.profilePic,
         });
       }
 

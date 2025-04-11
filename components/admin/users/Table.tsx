@@ -10,21 +10,11 @@ import {
 } from "@/components/ui/table";
 import { users as initialUsers } from "@/constants";
 import Image from "next/image";
-import {
-  Trash2,
-  ExternalLink,
-  Check,
-  ArrowUpDown,
-  CircleX,
-} from "lucide-react";
+import { Trash2, ExternalLink, ArrowUpDown, CircleX } from "lucide-react";
 import { useState } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui";
+import { StatusDropdown } from "./StatusDropDown";
+import { DropdownOption } from "@/types";
 
 export function TableComponent({
   type,
@@ -52,6 +42,21 @@ export function TableComponent({
     setUsers(sortedUsers);
     setSortAsc(!sortAsc);
   };
+
+  const roleOptions: DropdownOption[] = [
+    {
+      value: "User",
+      label: "User",
+      colorClass: "text-pink-700",
+      backgroundColor: "bg-pink-100",
+    },
+    {
+      value: "Admin",
+      label: "Admin",
+      colorClass: "text-green-700",
+      backgroundColor: "bg-green-100",
+    },
+  ];
 
   return (
     <div className="w-full bg-white max-w-full mx-auto  rounded-xl shadow border border-gray-200 px-6 pt-6 pb-4">
@@ -126,39 +131,11 @@ export function TableComponent({
                 {type === "ALL USERS" && (
                   <>
                     <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <button
-                            className={`px-3 py-1 rounded-full text-xs font-semibold transition hover:opacity-80 ${
-                              roles[index] === "Admin"
-                                ? "bg-green-100 text-green-700"
-                                : "bg-pink-100 text-pink-700"
-                            }`}
-                          >
-                            {roles[index]}
-                          </button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start">
-                          <DropdownMenuItem
-                            onClick={() => updateRole(index, "User")}
-                            className="flex items-center justify-between"
-                          >
-                            <span className="text-pink-700">User</span>
-                            {roles[index] === "User" && (
-                              <Check size={14} className="text-pink-700" />
-                            )}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => updateRole(index, "Admin")}
-                            className="flex items-center justify-between"
-                          >
-                            <span className="text-green-700">Admin</span>
-                            {roles[index] === "Admin" && (
-                              <Check size={14} className="text-green-700" />
-                            )}
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <StatusDropdown
+                        currentValue={roles[index]}
+                        options={roleOptions}
+                        onSelect={(role) => updateRole(index, role)}
+                      />
                     </TableCell>
                     <TableCell className="text-sm">
                       {user.booksBorrowed}

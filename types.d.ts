@@ -148,3 +148,17 @@ interface BorrowedBooksResponse {
   data: BorrowedBook[];
   pagination: Pagination;
 }
+
+interface DropdownOption {
+  value: string;
+  label: string;
+  colorClass: string;
+  backgroundColor: string;
+}
+
+interface StatusDropdownProps<T extends string> {
+  currentValue: string;
+  options: DropdownOption[];
+  onSelect: (value: T) => void;
+  className?: string;
+}
