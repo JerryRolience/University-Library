@@ -16,9 +16,9 @@ const layout = ({ children }: { children: ReactNode }) => {
     if (!loading && !isAuthenticated) {
       router.push(`/sign-in`);
     }
-    if (user?.role !== "ADMIN") {
-      router.push("/");
-    }
+    // if (user?.role !== "ADMIN") {
+    //   router.push("/");
+    // }
   }, [isAuthenticated, loading, router]);
 
   if (loading) {

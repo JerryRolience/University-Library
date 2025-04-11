@@ -201,3 +201,63 @@ export const sampleBooks = [
 `,
   },
 ];
+
+export interface User {
+  name: string;
+  email: string;
+  role: string;
+  booksBorrowed: number;
+  universityID: string;
+  dateJoined: string;
+}
+
+export const users: User[] = [
+  {
+    name: "Darrell Steward",
+    email: "darrelsteward@gmail.com",
+    role: "User",
+    booksBorrowed: 10,
+    universityID: "90324423789",
+    dateJoined: "Dec 19 2023",
+  },
+  {
+    name: "Marc Aterson",
+    email: "marcinee@miai.com",
+    role: "Admin",
+    booksBorrowed: 32,
+    universityID: "90324423789",
+    dateJoined: "Dec 19 2023",
+  },
+  {
+    name: "Susan Drake",
+    email: "contact@susandrake.io",
+    role: "User",
+    booksBorrowed: 13,
+    universityID: "90324423789",
+    dateJoined: "Dec 19 2023",
+  },
+  {
+    name: "Darrell Steward",
+    email: "darrelsteward@gmail.com",
+    role: "Admin",
+    booksBorrowed: 10,
+    universityID: "90324423789",
+    dateJoined: "Dec 19 2023",
+  },
+  {
+    name: "Marc Aterson",
+    email: "marcinee@miai.com",
+    role: "User",
+    booksBorrowed: 32,
+    universityID: "90324423789",
+    dateJoined: "Dec 19 2023",
+  },
+  {
+    name: "Susan Drake",
+    email: "contact@susandrake.io",
+    role: "User",
+    booksBorrowed: 13,
+    universityID: "90324423789",
+    dateJoined: "Dec 19 2023",
+  },
+];
