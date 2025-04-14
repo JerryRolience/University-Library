@@ -10,7 +10,6 @@ import { Check } from "lucide-react";
 export function StatusDropdown<T extends string>({
   currentValue,
   options,
-  onSelect,
 }: StatusDropdownProps<T>) {
   // Find the current option to apply its color
   const currentOption =
@@ -29,7 +28,6 @@ export function StatusDropdown<T extends string>({
         {options.map((option) => (
           <DropdownMenuItem
             key={option.value}
-            onClick={() => onSelect(option.value as T)}
             className="flex items-center justify-between gap-2"
           >
             <span className={option.colorClass}>{option.label}</span>

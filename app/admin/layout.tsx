@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import "@/styles/admin.css";
 import SideBar from "@/components/admin/SideBar";
-import Header from "@/components/admin/Header";
+import Header from "@/components/admin/home/Header";
+import { UserProvider } from "@/contexts/UserContext";
 
 const layout = ({ children }: { children: ReactNode }) => {
   const { user, isAuthenticated, loading } = useAuth();
@@ -45,7 +46,7 @@ const layout = ({ children }: { children: ReactNode }) => {
       {/* Main content area */}
       <div className="admin-container">
         <Header userDetails={user} />
-        {children}
+        <UserProvider> {children}</UserProvider>
       </div>
     </main>
   );

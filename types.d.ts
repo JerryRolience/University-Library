@@ -36,6 +36,19 @@ interface DataBaseBooks {
   isLoanedBook?: boolean;
 }
 
+interface BorrowRecords {
+  BookTitle: string;
+  BookCoverUrl: string;
+  BookCoverColor: string;
+  UserName: string;
+  UserProfilePic: string;
+  UserEmail: string;
+  Status: string;
+  BorrowDate: Date;
+  DueDate: Date;
+  ReturnedDate?: Date;
+}
+
 type BookCoverVariant = "extraSmall" | "small" | "medium" | "regular" | "wide";
 
 interface BookCoverProps {
@@ -83,6 +96,26 @@ interface FileUploadProps {
   onFileChange: (filePath: string) => void;
 }
 
+interface UserTableProps {
+  initialUsers: AllUser[];
+  title: string;
+  sort: string;
+  type: "ALL USERS" | "ACCOUNT REQUEST";
+  sortAsc: boolean;
+  loadingUsers: boolean;
+  errorUsers: string | null;
+  sortByName: () => void;
+}
+
+interface UserContextType {
+  users: AllUser[];
+  loadingUsers: boolean;
+  errorUsers: string | null;
+  sortAsc: boolean;
+  fetchUsers: () => Promise<void>;
+  sortByName: () => void;
+}
+
 interface User {
   name: string;
   email: string;
@@ -91,6 +124,12 @@ interface User {
   universityCard: string;
   profilePic?: string;
   status: string;
+}
+
+interface AllUser extends User {
+  profilePic?: string | null;
+  booksBorrowed: number;
+  dateJoined: Date;
 }
 
 interface AuthContextType {
@@ -159,6 +198,23 @@ interface DropdownOption {
 interface StatusDropdownProps<T extends string> {
   currentValue: string;
   options: DropdownOption[];
-  onSelect: (value: T) => void;
   className?: string;
+}
+
+interface ActionDialogProps {
+  type: "Approve Account Request" | "Deny Account Request";
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+interface DeleteAlertDialogProps {
+  type: "Delete User" | "Delete Book";
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+interface ViewCardDialogProps {
+  IDCard: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }

@@ -1,3 +1,5 @@
+import { DropdownOption } from "@/types";
+
 export const navigationLinks = [
   {
     href: "/library",
@@ -55,6 +57,33 @@ export const FIELD_TYPES = {
   universityId: "text",
   password: "password",
 };
+
+export interface User {
+  name: string;
+  email: string;
+  role: string;
+  booksBorrowed: number;
+  universityID: string;
+  dateJoined: string;
+}
+
+export const bookTitles = [
+  "Book Title",
+  "Author",
+  "Genre",
+  "Date Created",
+  "Action",
+];
+
+export const bookBorrowRecordsTitles = [
+  "Book",
+  "User Requested",
+  "Status",
+  "Borrowed date",
+  "Return date",
+  "Due Date",
+  "Receipt",
+];
 
 export const sampleBooks = [
   {
@@ -202,218 +231,13 @@ export const sampleBooks = [
   },
 ];
 
-export interface User {
-  name: string;
-  email: string;
-  role: string;
-  booksBorrowed: number;
-  universityID: string;
-  dateJoined: string;
+export function getUserTableHeaders(type: "ALL USERS" | "ACCOUNT REQUEST") {
+  return [
+    "Name",
+    "Date Joined",
+    ...(type === "ALL USERS" ? ["Role", "Books Borrowed"] : []),
+    "University ID No",
+    "University ID Card",
+    "Action",
+  ];
 }
-
-export const users: User[] = [
-  {
-    name: "Darrell Steward",
-    email: "darrelsteward@gmail.com",
-    role: "User",
-    booksBorrowed: 10,
-    universityID: "90324423789",
-    dateJoined: "Dec 19 2023",
-  },
-  {
-    name: "Marc Aterson",
-    email: "marcinee@miai.com",
-    role: "Admin",
-    booksBorrowed: 32,
-    universityID: "90324423789",
-    dateJoined: "Dec 19 2023",
-  },
-  {
-    name: "Susan Drake",
-    email: "contact@susandrake.io",
-    role: "User",
-    booksBorrowed: 13,
-    universityID: "90324423789",
-    dateJoined: "Dec 19 2023",
-  },
-  {
-    name: "Darrell Steward",
-    email: "darrelsteward@gmail.com",
-    role: "Admin",
-    booksBorrowed: 10,
-    universityID: "90324423789",
-    dateJoined: "Dec 19 2023",
-  },
-  {
-    name: "Marc Aterson",
-    email: "marcinee@miai.com",
-    role: "User",
-    booksBorrowed: 32,
-    universityID: "90324423789",
-    dateJoined: "Dec 19 2023",
-  },
-  {
-    name: "Susan Drake",
-    email: "contact@susandrake.io",
-    role: "User",
-    booksBorrowed: 13,
-    universityID: "90324423789",
-    dateJoined: "Dec 19 2023",
-  },
-];
-
-export const bookTitles = [
-  "Book Title",
-  "Author",
-  "Genre",
-  "Date Created",
-  "Action",
-];
-
-export const bookBorrowRecordsTitles = [
-  "Book",
-  "User Requested",
-  "Status",
-  "Borrowed date",
-  "Return date",
-  "Due Date",
-  "Receipt",
-];
-
-export const borrowRecords = [
-  {
-    BookTitle: "The Silent Patient",
-    UserName: "Alice Morgan",
-    UserEmail: "alice.morgan@example.com",
-    Status: "Borrowed",
-    BorrowDate: "2025-04-01",
-    DueDate: "2025-04-15",
-    ReturnedDate: null,
-  },
-  {
-    BookTitle: "Educated",
-    UserName: "John Peterson",
-    UserEmail: "john.p@example.com",
-    Status: "Returned",
-    BorrowDate: "2025-03-10",
-    DueDate: "2025-03-24",
-    ReturnedDate: "2025-03-22",
-  },
-  {
-    BookTitle: "Atomic Habits",
-    UserName: "Sarah Lee",
-    UserEmail: "sarah.lee@example.com",
-    Status: "Late Return",
-    BorrowDate: "2025-03-01",
-    DueDate: "2025-03-15",
-    ReturnedDate: "2025-03-20",
-  },
-  {
-    BookTitle: "1984",
-    UserName: "Michael O'Neill",
-    UserEmail: "mike.oneill@example.com",
-    Status: "Borrowed",
-    BorrowDate: "2025-04-05",
-    DueDate: "2025-04-19",
-    ReturnedDate: null,
-  },
-  {
-    BookTitle: "The Alchemist",
-    UserName: "Emily Zhang",
-    UserEmail: "emily.zhang@example.com",
-    Status: "Returned",
-    BorrowDate: "2025-02-20",
-    DueDate: "2025-03-06",
-    ReturnedDate: "2025-03-05",
-  },
-  {
-    BookTitle: "Sapiens",
-    UserName: "Chris Martin",
-    UserEmail: "chris.m@example.com",
-    Status: "Late Return",
-    BorrowDate: "2025-01-10",
-    DueDate: "2025-01-24",
-    ReturnedDate: "2025-02-01",
-  },
-  {
-    BookTitle: "To Kill a Mockingbird",
-    UserName: "Grace Kim",
-    UserEmail: "grace.kim@example.com",
-    Status: "Borrowed",
-    BorrowDate: "2025-04-07",
-    DueDate: "2025-04-21",
-    ReturnedDate: null,
-  },
-  {
-    BookTitle: "The Great Gatsby",
-    UserName: "Daniel Reed",
-    UserEmail: "dan.reed@example.com",
-    Status: "Returned",
-    BorrowDate: "2025-03-01",
-    DueDate: "2025-03-15",
-    ReturnedDate: "2025-03-13",
-  },
-  {
-    BookTitle: "The Book Thief",
-    UserName: "Nina Alvarez",
-    UserEmail: "nina.alvarez@example.com",
-    Status: "Late Return",
-    BorrowDate: "2025-02-15",
-    DueDate: "2025-03-01",
-    ReturnedDate: "2025-03-05",
-  },
-  {
-    BookTitle: "Becoming",
-    UserName: "Liam Young",
-    UserEmail: "liam.young@example.com",
-    Status: "Returned",
-    BorrowDate: "2025-03-12",
-    DueDate: "2025-03-26",
-    ReturnedDate: "2025-03-25",
-  },
-  {
-    BookTitle: "The Catcher in the Rye",
-    UserName: "Olivia Brown",
-    UserEmail: "olivia.brown@example.com",
-    Status: "Borrowed",
-    BorrowDate: "2025-04-03",
-    DueDate: "2025-04-17",
-    ReturnedDate: null,
-  },
-  {
-    BookTitle: "The Midnight Library",
-    UserName: "Henry Zhao",
-    UserEmail: "henry.zhao@example.com",
-    Status: "Late Return",
-    BorrowDate: "2025-02-01",
-    DueDate: "2025-02-15",
-    ReturnedDate: "2025-02-20",
-  },
-  {
-    BookTitle: "The Subtle Art of Not Giving a F*ck",
-    UserName: "Sophia Turner",
-    UserEmail: "sophia.t@example.com",
-    Status: "Returned",
-    BorrowDate: "2025-01-25",
-    DueDate: "2025-02-08",
-    ReturnedDate: "2025-02-07",
-  },
-  {
-    BookTitle: "Rich Dad Poor Dad",
-    UserName: "Ethan Clarke",
-    UserEmail: "ethan.clarke@example.com",
-    Status: "Borrowed",
-    BorrowDate: "2025-04-09",
-    DueDate: "2025-04-23",
-    ReturnedDate: null,
-  },
-  {
-    BookTitle: "Dune",
-    UserName: "Zara Hussein",
-    UserEmail: "zara.hussein@example.com",
-    Status: "Returned",
-    BorrowDate: "2025-03-05",
-    DueDate: "2025-03-19",
-    ReturnedDate: "2025-03-18",
-  },
-];
