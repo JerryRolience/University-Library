@@ -1,12 +1,9 @@
 import { User } from "@/types";
 import { Input } from "../../ui/input";
 import { Search } from "lucide-react";
-import { IKImage } from "imagekitio-next";
-import config from "@/lib/config";
-import { Avatar, AvatarFallback } from "../../ui/avatar";
 import { AdminProfile } from "./AdminProfile";
 
-export default function Header({ userDetails }: { userDetails: User | null }) {
+export function AdminHomeHeader({ userDetails }: { userDetails: User | null }) {
   const user = userDetails;
 
   return (

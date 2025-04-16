@@ -1,4 +1,3 @@
-// app/book/[id]/page.tsx
 import { fetchRequest } from "@/lib/api";
 import { DataBaseBooks } from "@/types";
 import BookDetails from "@/components/Books/BookDetailsPage";

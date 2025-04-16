@@ -13,6 +13,7 @@ const variantStyles: Record<BookCoverVariant, string> = {
   medium: "book-cover_medium",
   regular: "book-cover_regular",
   wide: "book-cover_wide",
+  borrow: "book-cover_borrow",
 };
 
 const BookCover = ({

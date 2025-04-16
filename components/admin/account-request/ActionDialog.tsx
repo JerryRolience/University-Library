@@ -43,7 +43,9 @@ export function ActionDialog({ type, open, onOpenChange }: ActionDialogProps) {
 
         <Button
           className={`w-full ${
-            type === "Approve Account Request" ? "bg-green" : "bg-[#F46F70]"
+            type === "Approve Account Request"
+              ? "bg-green hover:bg-green/70"
+              : "bg-[#F46F70] hover:bg-[#f15556]"
           } py-3 lg:py-6 text-white text-sm hover:opacity-90 mt-2`}
           type="submit"
         >

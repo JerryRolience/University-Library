@@ -113,7 +113,7 @@ export default function UserProfile({
                   {label}
                 </span>
               </div>
-              <div className="ml-4 ">
+              <div className="ml-4  cursor-pointer">
                 <FaUserEdit
                   color="#E7C9A5"
                   size={24}

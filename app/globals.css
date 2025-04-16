@@ -71,6 +71,10 @@
     @apply w-[44px] h-[60px];
   }
 
+  .book-cover_borrow {
+    @apply w-[55px] h-[76px];
+  }
+
   .book-cover_medium {
     @apply w-[134px] md:w-[144px] h-[199px];
   }

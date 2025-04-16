@@ -5,9 +5,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import "@/styles/admin.css";
-import SideBar from "@/components/admin/SideBar";
-import Header from "@/components/admin/home/Header";
 import { UserProvider } from "@/contexts/UserContext";
+import { AdminSideBar } from "@/components/admin/AdminSideBar";
+import { AdminHomeHeader } from "@/components/admin/home/AdminHeader";
 
 const layout = ({ children }: { children: ReactNode }) => {
   const { user, isAuthenticated, loading } = useAuth();
@@ -41,11 +41,11 @@ const layout = ({ children }: { children: ReactNode }) => {
   return (
     <main className="flex flex-row min-h-screen w-full">
       {/* Sidebar */}
-      <SideBar userDetails={user} />
+      <AdminSideBar userDetails={user} />
 
       {/* Main content area */}
       <div className="admin-container">
-        <Header userDetails={user} />
+        <AdminHomeHeader userDetails={user} />
         <UserProvider> {children}</UserProvider>
       </div>
     </main>

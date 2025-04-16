@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { User } from "@/types";
 
-export default function SideBar({ userDetails }: { userDetails: User | null }) {
+export function AdminSideBar({ userDetails }: { userDetails: User | null }) {
   const user = userDetails;
   const pathname = usePathname();
 

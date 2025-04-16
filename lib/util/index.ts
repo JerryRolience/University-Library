@@ -15,19 +15,6 @@ export const formatLongDate = (dateString: string) => {
   return format(new Date(dateString), "MMM d, yyyy"); // "Apr 5, 2023"
 };
 
-export const getStatusColor = (status: string) => {
-  switch (status) {
-    case "BORROWED":
-      return "bg-blue-500";
-    case "OVERDUE":
-      return "bg-red-800";
-    case "RETURNED":
-      return "bg-green-500";
-    default:
-      return "bg-gray-500";
-  }
-};
-
 export const formatDate = (date: string | Date | null | undefined): string => {
   if (!date) return "N/A";
   const d = new Date(date);
@@ -39,6 +26,15 @@ export const formatDate = (date: string | Date | null | undefined): string => {
     })
     .replace(",", "");
 };
+
+export function formatToDate(date: string | Date | null | undefined): string {
+  if (!date) return "N/A";
+  const d = new Date(date);
+  const month = d.getMonth() + 1; // getMonth() returns 0-11
+  const day = d.getDate();
+  const year = d.getFullYear().toString().slice(-2); // Get last 2 digits
+  return `${day}/${month}/${year}`;
+}
 
 export const bookStatusOptions: DropdownOption[] = [
   {

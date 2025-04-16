@@ -61,7 +61,7 @@ export function BorrowedBookSection() {
     setPagination((prev) => ({
       ...prev,
       currentPage: 1,
-      itemsPerPage: 10, // Show more items when "View All" is clicked
+      itemsPerPage: 10,
     }));
   };
 

@@ -30,7 +30,7 @@ export default function Home() {
 
   return (
     <>
-      <BookOverview {...books[0]} /> {/* Changed from books[1] to books[0] */}
+      <BookOverview {...books[6]} /> {/* Changed from books[1] to books[0] */}
       <BookList
         title="Latest Books"
         books={books.slice(1)}

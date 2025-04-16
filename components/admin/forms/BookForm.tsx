@@ -22,27 +22,32 @@ import ColorPicker from "../ColorPicker";
 import { fetchRequest } from "@/lib/api";
 import { toast } from "sonner";
 
-export default function BookForm({ type, ...book }: BookFormProps) {
+export default function BookForm({ type, book }: BookFormProps) {
   const router = useRouter();
 
+  const create = type === "create";
   const form = useForm<z.infer<typeof bookSchema>>({
     resolver: zodResolver(bookSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      author: "",
-      genre: "",
-      rating: 1,
-      totalCopies: 1,
-      coverUrl: "",
-      coverColor: "",
-      videoUrl: "",
-      summary: "",
+      title: create ? "" : book?.title,
+      description: create ? "" : book?.description,
+      author: create ? "" : book?.author,
+      genre: create ? "" : book?.genre,
+      rating: create ? 1 : book?.rating,
+      totalCopies: create ? 1 : book?.totalCopies,
+      coverUrl: create ? "" : book?.coverUrl,
+      coverColor: create ? "" : book?.coverColor,
+      videoUrl: create ? "" : book?.videoUrl,
+      summary: create ? "" : book?.summary,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof bookSchema>) => {
-    const uri = `${process.env.NEXT_PUBLIC_API}/book/create-book`;
+    const uri =
+      type === "create"
+        ? `${process.env.NEXT_PUBLIC_API}/book/create-book`
+        : `${process.env.NEXT_PUBLIC_API}/book/update-book`;
+
     const storedToken = localStorage.getItem("token");
     const responseData = await fetchRequest(uri, "POST", values, storedToken);
 
@@ -87,7 +92,7 @@ export default function BookForm({ type, ...book }: BookFormProps) {
               <FormControl>
                 <Input
                   required
-                  placeholder="Book title"
+                  placeholder="Book Title"
                   {...field}
                   className="book-form_input"
                 />

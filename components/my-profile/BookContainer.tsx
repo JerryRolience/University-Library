@@ -1,8 +1,9 @@
-import { calculateDaysLeft, formatShortDate, getStatusColor } from "@/lib/util";
+import { calculateDaysLeft, formatShortDate } from "@/lib/util";
 import { BorrowedBook } from "@/types";
 import Image from "next/image";
 import { IoReceipt } from "react-icons/io5";
 import BookCover from "../Books/BookCover";
+import { hexToRgba } from "@/lib/utils";
 
 export default function BookContainer({ item }: { item: BorrowedBook }) {
   const daysLeft = calculateDaysLeft(item.borrowRecord.dueDate);
@@ -18,7 +19,13 @@ export default function BookContainer({ item }: { item: BorrowedBook }) {
     >
       <div className="flex justify-between items-start">
         <span
-          className={`${getStatusColor(status)} text-xs px-2 py-1 rounded-md`}
+          className={`text-xs px-2 py-1 rounded-md ${
+            status === "OVERDUE"
+              ? "bg-red-400"
+              : status === "RETURNED"
+                ? "bg-green-500"
+                : "bg-blue-500"
+          }`}
         >
           {status}
         </span>
@@ -28,12 +35,16 @@ export default function BookContainer({ item }: { item: BorrowedBook }) {
       </div>
 
       <div
-        className="relative mx-auto w-[240px] h-[247px] rounded-sm"
-        style={{ backgroundColor: color }}
+        className="relative mx-auto w-[240px] h-[247px] rounded-sm group overflow-hidden"
+        style={{ backgroundColor: hexToRgba(color, 0.3) }}
       >
-        <div className="mt-[28px] ml-12  drop-shadow-2xl shadow-black">
+        <div
+          className="absolute inset-0 rounded-sm transition duration-300 opacity-0 group-hover:opacity-100"
+          style={{ backgroundColor: hexToRgba(color, 0.4) }}
+        />
+        <div className="relative z-10 mt-[28px] ml-12 drop-shadow-2xl shadow-black">
           <BookCover
-            coverColor={item.bookDetail.coverColor}
+            coverColor={color}
             coverImage={item.bookDetail.coverUrl}
             variant="medium"
           />

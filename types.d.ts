@@ -37,9 +37,12 @@ interface DataBaseBooks {
 }
 
 interface BorrowRecords {
+  BookId: string;
   BookTitle: string;
   BookCoverUrl: string;
   BookCoverColor: string;
+  BookAuthor: string;
+  BookGenre: string;
   UserName: string;
   UserProfilePic: string;
   UserEmail: string;
@@ -49,7 +52,13 @@ interface BorrowRecords {
   ReturnedDate?: Date;
 }
 
-type BookCoverVariant = "extraSmall" | "small" | "medium" | "regular" | "wide";
+type BookCoverVariant =
+  | "extraSmall"
+  | "small"
+  | "medium"
+  | "regular"
+  | "wide"
+  | "borrow";
 
 interface BookCoverProps {
   className?: string;
@@ -82,8 +91,9 @@ interface EditProfilePicFormProps<T extends FieldValues> {
   defaultValues: T & { profilePic?: string };
 }
 
-interface BookFormProps extends Partial<Book> {
+interface BookFormProps {
   type: "create" | "update";
+  book?: DataBaseBooks;
 }
 
 interface FileUploadProps {
@@ -210,6 +220,7 @@ interface ActionDialogProps {
 interface DeleteAlertDialogProps {
   type: "Delete User" | "Delete Book";
   open: boolean;
+  bookId: string;
   onOpenChange: (open: boolean) => void;
 }
 

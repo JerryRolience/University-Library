@@ -14,6 +14,7 @@ export function DeleteAlertDialog({
   type,
   open,
   onOpenChange,
+  bookId,
 }: DeleteAlertDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
