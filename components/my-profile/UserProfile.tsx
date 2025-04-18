@@ -12,6 +12,7 @@ import { JSX } from "react";
 import { IKImage } from "imagekitio-next";
 import config from "@/lib/config";
 import { FaUserEdit } from "react-icons/fa";
+import { ActionButtons } from "./ActionButtons";
 
 export default function UserProfile({
   user,
@@ -74,6 +75,7 @@ export default function UserProfile({
             width={59}
             height={88}
             className="object-cover"
+            priority
           />
         </div>
       </div>
@@ -170,34 +172,11 @@ export default function UserProfile({
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-6 pt-4 grid grid-cols-2 sm:flex justify-between gap-3 sm:gap-4">
-          <button
-            className="flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-dark-400 hover:bg-dark-500 rounded-lg text-light-100 transition-colors text-sm sm:text-base"
-            aria-label="Edit profile"
-            onClick={handleProfileEdit}
-          >
-            <FiEdit2 size={16} className="shrink-0" />
-            <span className="truncate">Edit Profile</span>
-          </button>
-          <button
-            className="flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-dark-400 hover:bg-dark-500 rounded-lg text-light-100 transition-colors text-sm sm:text-base"
-            aria-label="Settings"
-          >
-            <IoSettingsOutline size={16} className="shrink-0" />
-            <span className="truncate">Settings</span>
-          </button>
-          <button
-            onClick={handleLogout}
-            disabled={isLoggingOut}
-            className="col-span-2 sm:col-auto flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg text-red-400 transition-colors text-sm sm:text-base"
-            aria-label="Log out"
-          >
-            <IoLogOutOutline size={16} className="shrink-0" />
-            <span className="truncate">
-              {isLoggingOut ? "Logging out..." : "Log out"}
-            </span>
-          </button>
-        </div>
+        <ActionButtons
+          isLoggingOut={isLoggingOut}
+          handleLogout={handleLogout}
+          handleProfileEdit={handleProfileEdit}
+        />
       </div>
     </div>
   );
