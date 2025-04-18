@@ -11,13 +11,12 @@ export function SearchHeroSection({
   handleSearch: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[40vh]">
-      <div className="max-w-2xl w-full text-center space-y-4">
+    <div className="flex flex-col items-center justify-center  my-5 md:min-h-[40vh]">
+      <div className="max-w-2xl w-full text-center space-y-3 md:space-y-4">
         <h3 className="text-lg font-ibm-plex-sans capitalize text-light-100">
           Discover your next great read:
         </h3>
-
-        <h1 className="text-2xl md:text-4xl lg:text-5xl font-ibm-plex-sans font-semibold text-light-100 leading-tight">
+        <h1 className=" text-2xl md:text-4xl lg:text-5xl font-ibm-plex-sans font-semibold text-light-100 leading-tight">
           Explore And Search For <span className="text-primary">Any Book</span>{" "}
           In Our Library
         </h1>

@@ -43,7 +43,7 @@ export function HomeHeader() {
   }
 
   return (
-    <header className="my-10 flex justify-between mx-4  md:mx-0">
+    <header className="my-10 flex items-center  justify-between mx-4  md:mx-0">
       <Link href="/">
         <Image src="/icons/logo.svg" alt="logo" width={40} height={40} />
       </Link>

@@ -96,8 +96,8 @@ export function BookListSection({
                 <span className="sr-only">Previous page</span>
               </Button>
 
-              <div className="flex items-center justify-center rounded-md bg-primary/10 px-4 py-2">
-                <span className="text-sm font-medium text-primary">
+              <div className="flex items-center justify-center rounded-md bg-primary/10 px-4 py-4">
+                <span className=" text-xs sm:text-sm font-medium text-primary">
                   Page {pagination.page} of {pagination.totalPages}
                 </span>
               </div>

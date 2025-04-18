@@ -202,8 +202,7 @@ export default function Search() {
           filter,
           minRating,
           maxRating,
-          availableOnly,
-          pagination.page
+          availableOnly
         );
       }
     }, 500);

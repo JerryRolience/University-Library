@@ -30,6 +30,7 @@ export function SearchFilterBox({
   loading,
   pagination,
 }: SearchFilterProps) {
+  console.log("Filter", filter);
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
       {hasSearched ? (
@@ -122,7 +123,7 @@ export function SearchFilterBox({
 
           {hasSearched && (
             <Button
-              disabled={searchQuery === ""}
+              disabled={searchQuery === "" && filter === "all"}
               onClick={clearSearch}
               variant="ghost"
               className="text-primary hover:text-dark-100 hover:bg-primary transition-colors"
