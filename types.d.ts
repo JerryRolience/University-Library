@@ -88,7 +88,7 @@ interface EditProfileFormProps<T extends FieldValues> {
 interface EditProfilePicFormProps<T extends FieldValues> {
   schema: ZodType<T>;
   onSubmit: (response) => void;
-  defaultValues: T & { profilePic?: string };
+  defaultValues: T;
 }
 
 interface BookFormProps {
@@ -104,6 +104,9 @@ interface FileUploadProps {
   variant: "dark" | "light";
   value?: string;
   onFileChange: (filePath: string) => void;
+  width?: number;
+  height?: number;
+  className?: string;
 }
 
 interface UserTableProps {

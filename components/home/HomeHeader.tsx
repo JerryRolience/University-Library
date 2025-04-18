@@ -27,7 +27,13 @@ export function HomeHeader() {
     return (
       <header className="my-10 flex justify-between items-center">
         <Link href="/">
-          <Image src="/icons/logo.svg" alt="logo" width={40} height={40} />
+          <Image
+            src="/icons/logo.svg"
+            alt="logo"
+            width={40}
+            height={40}
+            priority
+          />
         </Link>
         <div className="flex items-center gap-6">
           <LoadingSpinner size="sm" className="text-white" />
@@ -42,7 +48,7 @@ export function HomeHeader() {
         <Image src="/icons/logo.svg" alt="logo" width={40} height={40} />
       </Link>
 
-      <ul className="flex items-center gap-6">
+      <ul className="flex items-center gap-3 md:gap-6  ml-12  sm:ml-20   md:ml-[300px]  lg:ml-[500px]  xl:ml-[700px]">
         <li>
           <Link
             href="/"

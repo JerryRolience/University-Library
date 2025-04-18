@@ -44,6 +44,9 @@ export default function FileUpload({
   accept,
   onFileChange,
   value,
+  width,
+  height,
+  className,
 }: FileUploadProps) {
   const ikUploadRef = useRef(null);
   const [file, setFile] = useState<{ filePath: string | null }>({
@@ -159,8 +162,9 @@ export default function FileUpload({
           <IKImage
             alt={file.filePath ?? "Uploaded file"}
             path={file.filePath ?? undefined}
-            width={500}
-            height={300}
+            width={width ? width : 500}
+            height={height ? height : 300}
+            className={cn(className)}
           />
         ) : type === "video" ? (
           <IKVideo

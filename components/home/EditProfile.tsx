@@ -29,7 +29,7 @@ import { LoadingSpinner } from "./LoadingSpinner";
 import { useState } from "react";
 import FileUpload from "./FileUpload";
 
-const EditProfilePicForm = <T extends FieldValues>({
+const EditProfileForm = <T extends FieldValues>({
   schema,
   defaultValues,
   onSubmit,
@@ -46,7 +46,7 @@ const EditProfilePicForm = <T extends FieldValues>({
   const handleSubmit: SubmitHandler<T> = async (data: T) => {
     setIsLoading(true);
     try {
-      const uri = `${process.env.NEXT_PUBLIC_API}/user/update-user-pic`;
+      const uri = `${process.env.NEXT_PUBLIC_API}/user/update-user-profile`;
       const token = localStorage.getItem("token");
       const responseData = await fetchRequest(uri, "POST", data, token);
 
@@ -119,6 +119,9 @@ const EditProfilePicForm = <T extends FieldValues>({
                         folder="profile"
                         variant="dark"
                         value={field.value}
+                        width={100}
+                        height={100}
+                        className="rounded-full mx-auto"
                       />
                     ) : (
                       <Input
@@ -157,4 +160,4 @@ const EditProfilePicForm = <T extends FieldValues>({
   );
 };
 
-export default EditProfilePicForm;
+export default EditProfileForm;

@@ -46,12 +46,7 @@ export const signUpSchema = z.object({
   password: passwordValidation,
 });
 
-export const editProfileSchema = z.object({
-  fullName: z
-    .string()
-    .min(3, "Full name must be at least 3 characters")
-    .max(50, "Full name cannot exceed 50 characters"),
-  email: z.string().email("Please enter a valid email address"),
+export const editIDDetailsSchema = z.object({
   universityId: z.string().refine(
     (val) => {
       // Basic format check
@@ -73,7 +68,12 @@ export const editProfileSchema = z.object({
   universityCard: z.string().nonempty("University card image is required"),
 });
 
-export const editProfilePicSchema = z.object({
+export const editProfileSchema = z.object({
+  fullName: z
+    .string()
+    .min(3, "Full name must be at least 3 characters")
+    .max(50, "Full name cannot exceed 50 characters"),
+  email: z.string().email("Please enter a valid email address"),
   profilePic: z.string().nonempty("Profile picture is required"),
 });
 

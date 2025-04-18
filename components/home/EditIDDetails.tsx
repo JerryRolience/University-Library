@@ -45,14 +45,12 @@ const EditProfileForm = <T extends FieldValues>({
 
   const handleSubmit: SubmitHandler<T> = async (data: T) => {
     const fields = {
-      fullName: data.fullName,
-      email: data.email,
       universityID: data.universityId,
       universityCard: data.universityCard,
     };
     setIsLoading(true);
     try {
-      const uri = `${process.env.NEXT_PUBLIC_API}/user/update-user-profile`;
+      const uri = `${process.env.NEXT_PUBLIC_API}/user/update-user-id-details`;
       const token = localStorage.getItem("token");
       const responseData = await fetchRequest(uri, "POST", fields, token);
 
@@ -82,6 +80,7 @@ const EditProfileForm = <T extends FieldValues>({
         status: responseData.data.user?.status,
         universityCard: responseData.data.user?.universityCard,
         universityID: responseData.data.user?.universityID,
+        profilePic: responseData.data.user?.profilePic,
       });
 
       toast.success("Profile updated", {

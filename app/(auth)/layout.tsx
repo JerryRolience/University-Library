@@ -7,7 +7,13 @@ const layout = ({ children }: { children: ReactNode }) => {
       <section className="auth-form">
         <div className="auth-box">
           <div className="flex flex-row gap-3">
-            <Image src="/icons/logo.svg" alt="logo" width={37} height={37} />
+            <Image
+              src="/icons/logo.svg"
+              alt="logo"
+              width={37}
+              height={37}
+              priority
+            />
             <h1 className="">BookWise</h1>
           </div>
 
@@ -22,6 +28,7 @@ const layout = ({ children }: { children: ReactNode }) => {
           height={1000}
           width={1000}
           className="size-full object-cover"
+          priority
         />
       </section>
     </main>

@@ -33,7 +33,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <main className="root-container">
       <div className="mx-auto max-w-7xl">
         <HomeHeader />
-        <div className="mt-20 pb-20">{children}</div>
+        <div className="mt-20 pb-20">{children}</div>z
       </div>
     </main>
   );

@@ -32,6 +32,7 @@ export function SearchHeroSection({
               alt="search"
               width={24}
               height={24}
+              priority
             />
           </button>
           <Input

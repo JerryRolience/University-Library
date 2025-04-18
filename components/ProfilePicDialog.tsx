@@ -6,10 +6,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { editProfilePicSchema } from "@/lib/validations";
+import { editProfileSchema } from "@/lib/validations";
 import { User } from "@/types";
 import { Button } from "./ui/button";
-import EditProfilePicForm from "./home/EditProfilePic";
+import EditProfilePicForm from "./home/EditProfile";
 
 export function ProfilePicDialog({
   isOpen,
@@ -30,8 +30,10 @@ export function ProfilePicDialog({
           </DialogDescription>
         </DialogHeader>
         <EditProfilePicForm
-          schema={editProfilePicSchema}
+          schema={editProfileSchema}
           defaultValues={{
+            fullName: user?.name || "",
+            email: user?.email || "",
             profilePic: user?.profilePic || "",
           }}
           onSubmit={(success: boolean) => {

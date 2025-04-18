@@ -9,7 +9,6 @@ const BookList = ({
   containerClassName,
   variant,
 }: BookListProps & { variant?: BookCoverVariant }) => {
-  if (books.length < 2) return;
   return (
     <section className={containerClassName}>
       <h2

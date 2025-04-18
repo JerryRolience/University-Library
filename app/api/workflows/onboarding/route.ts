@@ -1,5 +1,5 @@
 import { serve } from "@upstash/workflow/nextjs";
-import { sendEmail } from "@/lib/email";
+import { sendEmail } from "@/lib/email/send-email";
 import { fetchRequest } from "@/lib/api";
 
 type UserState = "non-active" | "inactive" | "active";
