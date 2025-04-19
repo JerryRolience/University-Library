@@ -19,13 +19,21 @@ export function BorrowBook({
   author: string;
 }) {
   const { user } = useAuth();
-
   const router = useRouter();
   const [isBorrowing, setIsBorrowing] = useState(false);
 
   const triggerWorkflow = async (borrowRecord: any) => {
     try {
-      const workflowResponse = await fetch("/api/workflows/onboarding", {
+      if (
+        !borrowRecord.data ||
+        !borrowRecord.data.borrowDate ||
+        !borrowRecord.data.dueDate
+      ) {
+        console.error("Invalid borrow record:", borrowRecord);
+        return;
+      }
+
+      const workflowResponse = await fetch("/api/workflows/borrow-book", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,9 +42,9 @@ export function BorrowBook({
           email: user?.email,
           fullName: user?.name,
           bookTitle: title,
-          borrowDate: borrowRecord.borrowedDate.toISOString(),
-          dueDate: borrowRecord.dueDate.toISOString(),
-          borrowId: borrowRecord.id,
+          borrowDate: new Date(borrowRecord.data.borrowDate).toISOString(), // Fixed property name
+          dueDate: new Date(borrowRecord.data.dueDate).toISOString(),
+          borrowId: borrowRecord.data.id,
         }),
       });
 
