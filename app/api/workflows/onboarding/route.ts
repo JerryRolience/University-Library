@@ -35,10 +35,14 @@ export const { POST } = serve<InitialData>(async (context) => {
         await sendEmail("newsletter", email, { fullName });
         await sendEmail("active", email, { fullName });
       });
+    } else if (state === "inactive") {
+      await context.run("send-email-inactive", async () => {
+        await sendEmail("inactive", email, { fullName });
+      });
     }
 
     // 4. Wait 1 month between checks
-    await context.sleep("wait-for-1-month", 60 * 60 * 24 * 30);
+    await context.sleep("wait-for-1-month", 60 * 60 * 24 * 32);
   }
 });
 

@@ -7,10 +7,46 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LoadingSpinner } from "../home/LoadingSpinner";
+import { useAuth } from "@/contexts/AuthContext";
 
-export function BorrowBook({ bookId }: { bookId: string }) {
+export function BorrowBook({
+  bookId,
+  title,
+  author,
+}: {
+  bookId: string;
+  title: string;
+  author: string;
+}) {
+  const { user } = useAuth();
+
   const router = useRouter();
   const [isBorrowing, setIsBorrowing] = useState(false);
+
+  const triggerWorkflow = async (borrowRecord: any) => {
+    try {
+      const workflowResponse = await fetch("/api/workflows/onboarding", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user?.email,
+          fullName: user?.name,
+          bookTitle: title,
+          borrowDate: borrowRecord.borrowedDate.toISOString(),
+          dueDate: borrowRecord.dueDate.toISOString(),
+          borrowId: borrowRecord.id,
+        }),
+      });
+
+      if (!workflowResponse.ok) {
+        console.error("Failed to trigger workflow");
+      }
+    } catch (error) {
+      console.error("Workflow trigger error:", error);
+    }
+  };
 
   const handleBorrow = async () => {
     try {
@@ -40,6 +76,9 @@ export function BorrowBook({ bookId }: { bookId: string }) {
         });
         return;
       }
+
+      // Trigger workflow after successful borrow
+      await triggerWorkflow(responseData.data);
 
       toast.success("Book borrowed successfully", {
         description: "You can now read the book.",

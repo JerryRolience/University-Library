@@ -52,7 +52,7 @@ const BookOverview = ({
 
         <p className="book-description">{description} </p>
 
-        <BorrowBook bookId={id} />
+        <BorrowBook bookId={id} title={title} author={author} />
       </div>
 
       <div className="relative flex flex-1 justify-center">

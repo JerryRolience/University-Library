@@ -43,6 +43,7 @@ export function ActionButtons({
     // After deletion is complete:
     setIsDeleting(false);
     setConfirmationText("");
+    handleLogout();
   };
 
   const handleDialogClose = () => {

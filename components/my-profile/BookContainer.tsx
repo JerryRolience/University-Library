@@ -4,6 +4,8 @@ import Image from "next/image";
 import { IoReceipt } from "react-icons/io5";
 import BookCover from "../Books/BookCover";
 import { hexToRgba } from "@/lib/utils";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { ReceiptPDF } from "./ReceiptPDF";
 
 export default function BookContainer({ item }: { item: BorrowedBook }) {
   const daysLeft = calculateDaysLeft(item.borrowRecord.dueDate);
@@ -63,62 +65,74 @@ export default function BookContainer({ item }: { item: BorrowedBook }) {
         </p>
       </div>
 
-      <div className="mt-auto w-full space-y-2 sm:space-y-3">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/icons/book.svg"
-            alt=""
-            width={16}
-            height={16}
-            className="object-contain bg-green-400"
-            aria-hidden="true"
-          />
-          <p className="text-xs sm:text-sm text-light-100">
-            Borrowed on {formatShortDate(item.borrowRecord.borrowDate)}
-          </p>
-        </div>
+      <div className="flex items-center gap-2">
+        <Image
+          src="/icons/book.svg"
+          alt=""
+          width={16}
+          height={16}
+          className="object-contain bg-green-400"
+          aria-hidden="true"
+        />
+        <p className="text-xs sm:text-sm text-light-100">
+          Borrowed on {formatShortDate(item.borrowRecord.borrowDate)}
+        </p>
+      </div>
 
-        <div className="flex justify-between items-center">
-          {status !== "RETURNED" ? (
-            <div className="flex items-center gap-2">
-              <Image
-                src={isOverdue ? "/images/warning.png" : "/icons/calendar.svg"}
-                alt=""
-                width={16}
-                height={16}
-                className="object-contain"
-                aria-hidden="true"
-              />
-              <p
-                className={`text-xs sm:text-sm ${isOverdue ? "text-red-400" : "text-light-100"}`}
-              >
-                {isOverdue
-                  ? `${Math.abs(daysLeft)} days overdue`
-                  : `${daysLeft} days left to return`}
-              </p>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <Image
-                src="/images/tick-circle.png"
-                alt="Returned"
-                width={16}
-                height={16}
-                className="object-contain"
-                aria-hidden="true"
-              />
-              <p className="text-xs sm:text-sm text-green-400">
-                Returned on {formatShortDate(item.borrowRecord.dueDate)}
-              </p>
-            </div>
+      <div className="flex justify-between items-center">
+        {status !== "RETURNED" ? (
+          <div className="flex items-center gap-2">
+            <Image
+              src={isOverdue ? "/images/warning.png" : "/icons/calendar.svg"}
+              alt=""
+              width={16}
+              height={16}
+              className="object-contain"
+              aria-hidden="true"
+            />
+            <p
+              className={`text-xs sm:text-sm ${isOverdue ? "text-red-400" : "text-light-100"}`}
+            >
+              {isOverdue
+                ? `${Math.abs(daysLeft)} days overdue`
+                : `${daysLeft} days left to return`}
+            </p>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <Image
+              src="/images/tick-circle.png"
+              alt="Returned"
+              width={16}
+              height={16}
+              className="object-contain"
+              aria-hidden="true"
+            />
+            <p className="text-xs sm:text-sm text-green-400">
+              Returned on {formatShortDate(item.borrowRecord.dueDate)}
+            </p>
+          </div>
+        )}
+
+        <PDFDownloadLink
+          document={<ReceiptPDF book={item} />}
+          fileName={`receipt-${item.bookDetail.title.replace(/\s+/g, "-")}-${item.borrowRecord._id}.pdf`}
+        >
+          {({ loading }) => (
+            <button
+              className="text-light-100 hover:text-primary transition-colors flex items-center gap-1"
+              aria-label={`Download receipt for ${item.bookDetail.title}`}
+              disabled={loading}
+            >
+              <IoReceipt size={18} className="sm:w-5 sm:h-5" />
+              {loading ? (
+                <p className="text-xs">Generating...</p>
+              ) : (
+                <span className="text-xs">Generate Receipt</span>
+              )}
+            </button>
           )}
-          <button
-            aria-label={`View receipt for ${item.bookDetail.title}`}
-            className="text-light-100 hover:text-primary transition-colors"
-          >
-            <IoReceipt size={18} className="sm:w-5 sm:h-5" />
-          </button>
-        </div>
+        </PDFDownloadLink>
       </div>
     </article>
   );
