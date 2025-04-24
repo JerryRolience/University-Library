@@ -28,6 +28,7 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
         borrowDate: formatDate(borrowDate),
         dueDate: formatDate(dueDate),
       });
+      console.log("Borrow confirmation email sent");
     });
   } catch (error) {
     console.error("Failed to send borrow confirmation:", error);
@@ -41,6 +42,7 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
         borrowDate: formatDate(borrowDate),
         dueDate: formatDate(dueDate),
       });
+      console.log("Book receipt confirmation email sent");
     });
   } catch (error) {
     console.error("Failed to send book receipt confirmation:", error);
@@ -53,10 +55,9 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
   const now = new Date(await ctx.run("get-now", () => new Date()));
   const remindDate = subDays(due, 2);
 
-  // Step 3: Wait until 2 days before dueDate
+  // TEST MODIFICATION: Wait 5 seconds instead of 2 days
   if (isBefore(now, remindDate)) {
-    const msUntilRemind = remindDate.getTime() - now.getTime();
-    await ctx.sleep("wait-2-days-before-due", (msUntilRemind + 5000) / 1000);
+    await ctx.sleep("wait-2-days-before-due", 5); // 5 seconds instead of 2 days
   }
 
   // Step 4: Send reminder if not returned
@@ -69,17 +70,15 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
           bookTitle,
           dueDate: formatDate(dueDate),
         });
+        console.log("Pre-due reminder email sent");
       }
     });
   } catch (error) {
     console.error("Failed to send pre-due reminder:", error);
   }
 
-  // Step 5: Wait until dueDate
-  const msUntilDue = due.getTime() - now.getTime();
-  if (msUntilDue > 0) {
-    await ctx.sleep("wait-until-due-date", (msUntilDue + 5000) / 1000);
-  }
+  // TEST MODIFICATION: Wait 5 seconds instead of until due date
+  await ctx.sleep("wait-until-due-date", 5); // 5 seconds instead of actual wait
 
   // Step 6: Send due date reminder
   try {
@@ -91,17 +90,19 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
           bookTitle,
           dueDate,
         });
+        console.log("Due date reminder email sent");
       }
     });
   } catch (error) {
     console.error("Failed to send due date reminder:", error);
   }
 
-  // Step 7: Overdue loop (every 5 days, max 12 times)
+  // TEST MODIFICATION: Overdue loop (every 5 seconds, max 3 times)
   let overdueCount = 0;
-  while (true) {
+  while (overdueCount < 3) {
+    // Reduced from 12 to 3 for testing
     overdueCount++;
-    await ctx.sleep(`wait-5-days-overdue-${overdueCount}`, 60 * 60 * 24 * 5);
+    await ctx.sleep(`wait-5-days-overdue-${overdueCount}`, 5); // 5 seconds instead of 5 days
 
     let status: BorrowStatus = "BORROWED";
     try {
@@ -128,12 +129,11 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
           dueDate: formatDate(dueDate),
           daysOverdue: overdueCount * 5,
         });
+        console.log(`Overdue reminder #${overdueCount} email sent`);
       });
     } catch (error) {
       console.error("Failed to send overdue reminder:", error);
     }
-
-    if (overdueCount >= 12) break;
   }
 });
 
