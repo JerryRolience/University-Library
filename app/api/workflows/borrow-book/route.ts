@@ -2,6 +2,7 @@ import { serve } from "@upstash/workflow/nextjs";
 import { sendEmail } from "@/lib/email/send-email";
 import { fetchRequest } from "@/lib/api";
 import { subDays, isBefore } from "date-fns";
+import { formatDate } from "@/lib/util";
 
 type BorrowPayload = {
   email: string;
@@ -24,8 +25,8 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
       await sendEmail("bookBorrowedTemplate", email, {
         fullName,
         bookTitle,
-        borrowDate,
-        dueDate,
+        borrowDate: formatDate(borrowDate),
+        dueDate: formatDate(dueDate),
       });
     });
   } catch (error) {
@@ -53,7 +54,7 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
         await sendEmail("bookDueReminderTemplate", email, {
           fullName,
           bookTitle,
-          dueDate,
+          dueDate: formatDate(dueDate),
         });
       }
     });
