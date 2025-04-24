@@ -10,24 +10,13 @@ type BorrowPayload = {
   borrowDate: string;
   dueDate: string;
   borrowId: string;
-  testMode?: boolean; // Add test mode flag
 };
 
 type BorrowStatus = "BORROWED" | "RETURNED" | "OVERDUE" | "NOT_FOUND";
 
 export const { POST } = serve<BorrowPayload>(async (ctx) => {
-  const {
-    email,
-    fullName,
-    bookTitle,
-    borrowDate,
-    dueDate,
-    borrowId,
-    testMode = true, // Default to false
-  } = ctx.requestPayload;
-
-  // TEST MODE: Speed up all delays by this factor (e.g., 1 second instead of 1 day)
-  const timeFactor = testMode ? 24 * 60 * 60 : 1;
+  const { email, fullName, bookTitle, borrowDate, dueDate, borrowId } =
+    ctx.requestPayload;
 
   // Step 1: Send confirmation email
   try {
@@ -44,24 +33,22 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
   }
 
   // Step 2: Prepare dates
-  const due = new Date(dueDate);
-  const now = new Date();
+  const due = new Date(
+    await ctx.run("parse-due-date", () => new Date(dueDate))
+  );
+  const now = new Date(await ctx.run("get-now", () => new Date()));
   const remindDate = subDays(due, 2);
 
-  // Step 3: Wait until 2 days before dueDate (or reduced time in test mode)
+  // Step 3: Wait until 2 days before dueDate
   if (isBefore(now, remindDate)) {
-    let msUntilRemind = remindDate.getTime() - now.getTime();
-    if (testMode) msUntilRemind = 5000; // 5 seconds instead of days
-    await ctx.sleep(
-      "wait-2-days-before-due",
-      msUntilRemind / 1000 / timeFactor
-    );
+    const msUntilRemind = remindDate.getTime() - now.getTime();
+    await ctx.sleep("wait-2-days-before-due", (msUntilRemind + 5000) / 1000);
   }
 
   // Step 4: Send reminder if not returned
   try {
     await ctx.run("send-pre-due-reminder", async () => {
-      const status = testMode ? "BORROWED" : await getBorrowStatus(borrowId); // Force borrowed in test
+      const status = await getBorrowStatus(borrowId);
       if (status === "BORROWED") {
         await sendEmail("bookDueReminderTemplate", email, {
           fullName,
@@ -74,17 +61,16 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
     console.error("Failed to send pre-due reminder:", error);
   }
 
-  // Step 5: Wait until dueDate (or reduced time in test mode)
-  let msUntilDue = due.getTime() - now.getTime();
-  if (testMode) msUntilDue = 5000; // 5 seconds instead of days
+  // Step 5: Wait until dueDate
+  const msUntilDue = due.getTime() - now.getTime();
   if (msUntilDue > 0) {
-    await ctx.sleep("wait-until-due-date", msUntilDue / 1000 / timeFactor);
+    await ctx.sleep("wait-until-due-date", (msUntilDue + 5000) / 1000);
   }
 
   // Step 6: Send due date reminder
   try {
     await ctx.run("send-due-date-reminder", async () => {
-      const status = testMode ? "BORROWED" : await getBorrowStatus(borrowId); // Force borrowed in test
+      const status = await getBorrowStatus(borrowId);
       if (status === "BORROWED") {
         await sendEmail("bookDueReminderTemplate", email, {
           fullName,
@@ -97,20 +83,17 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
     console.error("Failed to send due date reminder:", error);
   }
 
-  // Step 7: Overdue loop (every 5 days in production, 5 seconds in test mode)
+  // Step 7: Overdue loop (every 5 days, max 12 times)
   let overdueCount = 0;
-  while (overdueCount < 12) {
+  while (true) {
     overdueCount++;
-    const sleepDuration = testMode ? 5 : 60 * 60 * 24 * 5; // 5s vs 5 days
-    await ctx.sleep(`wait-5-days-overdue-${overdueCount}`, sleepDuration);
+    await ctx.sleep(`wait-5-days-overdue-${overdueCount}`, 60 * 60 * 24 * 5);
 
     let status: BorrowStatus = "BORROWED";
-    if (!testMode) {
-      try {
-        status = await getBorrowStatus(borrowId);
-      } catch (error) {
-        console.error("Failed to check borrow status:", error);
-      }
+    try {
+      status = await getBorrowStatus(borrowId);
+    } catch (error) {
+      console.error("Failed to check borrow status:", error);
     }
 
     if (status !== "BORROWED") break;
@@ -128,6 +111,8 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
     } catch (error) {
       console.error("Failed to send overdue reminder:", error);
     }
+
+    if (overdueCount >= 12) break;
   }
 });
 
@@ -146,6 +131,6 @@ async function getBorrowStatus(borrowId: string): Promise<BorrowStatus> {
     return response.data.status;
   } catch (error) {
     console.error("Failed to get borrow status:", error);
-    return "BORROWED";
+    return "BORROWED"; // fallback to continue the workflow
   }
 }
