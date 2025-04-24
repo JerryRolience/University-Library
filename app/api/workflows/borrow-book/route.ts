@@ -18,7 +18,7 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
   const { email, fullName, bookTitle, borrowDate, dueDate, borrowId } =
     ctx.requestPayload;
 
-  // Step 1: Send email immediately
+  // Step 1: Send confirmation email
   try {
     await ctx.run("send-borrow-confirmation", async () => {
       await sendEmail("bookBorrowedTemplate", email, {
@@ -32,17 +32,20 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
     console.error("Failed to send borrow confirmation:", error);
   }
 
-  const due = await ctx.run("parse-due-date", () => new Date(dueDate));
-  const now = await ctx.run("get-now", () => new Date());
-  const remindDate = await ctx.run("get-remind-date", () => subDays(due, 2));
+  // Step 2: Prepare dates
+  const due = new Date(
+    await ctx.run("parse-due-date", () => new Date(dueDate))
+  );
+  const now = new Date(await ctx.run("get-now", () => new Date()));
+  const remindDate = subDays(due, 2);
 
-  // Step 2: Wait until 2 days before dueDate
+  // Step 3: Wait until 2 days before dueDate
   if (isBefore(now, remindDate)) {
     const msUntilRemind = remindDate.getTime() - now.getTime();
     await ctx.sleep("wait-2-days-before-due", (msUntilRemind + 5000) / 1000);
   }
 
-  // Step 3: Send reminder if not returned
+  // Step 4: Send reminder if not returned
   try {
     await ctx.run("send-pre-due-reminder", async () => {
       const status = await getBorrowStatus(borrowId);
@@ -58,13 +61,13 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
     console.error("Failed to send pre-due reminder:", error);
   }
 
-  // Step 4: Wait until exact dueDate
+  // Step 5: Wait until dueDate
   const msUntilDue = due.getTime() - now.getTime();
   if (msUntilDue > 0) {
     await ctx.sleep("wait-until-due-date", (msUntilDue + 5000) / 1000);
   }
 
-  // Step 5: Send due date reminder
+  // Step 6: Send due date reminder
   try {
     await ctx.run("send-due-date-reminder", async () => {
       const status = await getBorrowStatus(borrowId);
@@ -80,7 +83,7 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
     console.error("Failed to send due date reminder:", error);
   }
 
-  // Step 6: Post-due reminder loop (every 5 days)
+  // Step 7: Overdue loop (every 5 days, max 12 times)
   let overdueCount = 0;
   while (true) {
     overdueCount++;
@@ -93,9 +96,7 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
       console.error("Failed to check borrow status:", error);
     }
 
-    if (status !== "BORROWED") {
-      break;
-    }
+    if (status !== "BORROWED") break;
 
     try {
       await ctx.run(`send-overdue-reminder-${overdueCount}`, async () => {
@@ -130,6 +131,6 @@ async function getBorrowStatus(borrowId: string): Promise<BorrowStatus> {
     return response.data.status;
   } catch (error) {
     console.error("Failed to get borrow status:", error);
-    return "BORROWED";
+    return "BORROWED"; // fallback to continue the workflow
   }
 }
