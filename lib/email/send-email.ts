@@ -48,7 +48,7 @@ export async function sendEmail(
     template = TEMPLATES[type](
       data.fullName || "User",
       data.bookTitle || "Unknown Book",
-      data.borrowDateDate || "Unknown Due Date",
+      data.borrowDate || "Unknown Due Date",
       data.dueDate || "Unknown Due Date",
       receiptDownloadUrl
     );
