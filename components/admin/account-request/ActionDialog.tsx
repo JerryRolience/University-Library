@@ -10,6 +10,10 @@ import { ActionDialogProps } from "@/types";
 import Image from "next/image";
 
 export function ActionDialog({ type, open, onOpenChange }: ActionDialogProps) {
+  const handleApprove = () => {};
+
+  const handleReject = () => {};
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild></DialogTrigger>
@@ -47,7 +51,6 @@ export function ActionDialog({ type, open, onOpenChange }: ActionDialogProps) {
               ? "bg-green hover:bg-green/70"
               : "bg-[#F46F70] hover:bg-[#f15556]"
           } py-3 lg:py-6 text-white text-sm hover:opacity-90 mt-2`}
-          type="submit"
         >
           {type === "Approve Account Request"
             ? "Approve & Send Confirmation"

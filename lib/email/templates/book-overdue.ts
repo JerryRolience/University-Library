@@ -1,17 +1,17 @@
-export const bookReceiptTemplate = (
+export const bookOverdueTemplate = (
   name: string,
   bookTitle: string,
-  borrowDate: string,
   dueDate: string,
-  receiptDownloadUrl: string
+  daysOverdue: number,
+  renewUrl: string
 ) => ({
-  subject: `Your Receipt for ${bookTitle} is Ready!`,
+  subject: `❗ Overdue: "${bookTitle}" (${daysOverdue} day${daysOverdue > 1 ? "s" : ""} late)`,
   html: `
       <!DOCTYPE html>
       <html>
       <head>
-        <style type="text/css">
-          body {
+        <style>
+         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #333333;
@@ -40,17 +40,7 @@ export const bookReceiptTemplate = (
             font-size: 16px;
             text-align: center;
           }
-          .receipt-details {
-            background-color: #F9FAFB;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            text-align: left;
-          }
-          .detail-item {
-            margin-bottom: 10px;
-          }
-          .detail-label {
+          .highlight {
             font-weight: 600;
             color: #111827;
           }
@@ -74,34 +64,39 @@ export const bookReceiptTemplate = (
             color: #6B7280;
             text-align: center;
           }
+          .reminder-box {
+            background-color: #FEE2E2;
+            border-left: 4px solid #DC2626;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+          }
+          .urgent {
+            color: #DC2626;
+            font-weight: 600;
+          }
         </style>
       </head>
       <body>
         <div class="header">
           <div class="logo">BookWise</div>
-          <h2>Your Receipt for ${bookTitle} is Ready!</h2>
+          <h2>Overdue: "${bookTitle}"</h2>
         </div>
         
         <p>Hi ${name},</p>
         
-        <p>Your receipt for borrowing <strong>${bookTitle}</strong> has been generated. Here are the details:</p>
-        
-        <div class="receipt-details">
-          <div class="detail-item">
-            <span class="detail-label">Borrowed On:</span> ${borrowDate}
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Due Date:</span> ${dueDate}
-          </div>
+        <div class="reminder-box">
+          <p><span class="urgent">Overdue ${daysOverdue} day${daysOverdue > 1 ? "s" : ""}:</span> <span class="highlight">${bookTitle}</span> was due on ${dueDate}.</p>
+          <p>Late fees will apply if not returned soon.</p>
         </div>
         
-        <p>To download the receipt go to the profile page and click generate receipt on the borrowed books section :</p>
+        <p style="text-align: center;">Please return immediately or renew online:</p>
         
-        <div class="button-container">
-          <a href="${receiptDownloadUrl}" class="button">Download Receipt</a>
+        <div style="text-align: center; margin: 25px 0;">
+          <a href="${renewUrl}" class="button">Renew & Pay Fees</a>
         </div>
         
-        <p>Keep the pages turning,<br>The BookWise Team</p>
+        <p>Questions? Reply to this email.<br>The BookWise Team</p>
         
         <div class="footer">
           © ${new Date().getFullYear()} BookWise. All rights reserved.
@@ -109,20 +104,5 @@ export const bookReceiptTemplate = (
       </body>
       </html>
     `,
-  text: `
-      BookWise - Receipt Generated
-      
-      Hi ${name},
-      
-      Your receipt for borrowing ${bookTitle} has been generated. Here are the details:
-      
-      Borrowed On: ${borrowDate}
-      Due Date: ${dueDate}
-      
-      You can download the receipt here:
-      ${receiptDownloadUrl}
-      
-      Keep the pages turning,
-      The BookWise Team
-    `,
+  text: `BookWise Overdue Notice\n\nHi ${name},\n\n"${bookTitle}" is ${daysOverdue} day${daysOverdue > 1 ? "s" : ""} overdue (due ${dueDate}).\n\nLate fees apply. Renew here: ${renewUrl}\n\nThe BookWise Team`,
 });

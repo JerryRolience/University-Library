@@ -18,13 +18,6 @@ export async function sendEmail(
       data.fullName || "User",
       data.books as EmailBook[]
     );
-  } else if (type === "bookDueReminderTemplate") {
-    template = TEMPLATES[type](
-      data.fullName || "User",
-      data.bookTitle || "Unknown Book",
-      data.dueDate || "Unknown Due Date",
-      loginUrl
-    );
   } else if (type === "bookBorrowedTemplate") {
     template = TEMPLATES[type](
       data.fullName || "User",
@@ -32,6 +25,24 @@ export async function sendEmail(
       data.borrowDate || "Unknown Due Date",
       data.dueDate || "Unknown Due Date",
       receiptDownloadUrl
+    );
+  } else if (
+    type === "bookDueDateReminderTemplate" ||
+    type === "bookPreDueReminderTemplate"
+  ) {
+    template = TEMPLATES[type](
+      data.fullName || "User",
+      data.bookTitle || "Unknown Book",
+      data.dueDate || "Unknown Due Date",
+      loginUrl
+    );
+  } else if (type === "bookOverdueTemplate") {
+    template = TEMPLATES[type](
+      data.fullName || "User",
+      data.bookTitle || "Unknown Book",
+      data.dueDate || "Unknown Due Date",
+      data.daysOverdue || 0,
+      loginUrl
     );
   } else if (type === "bookReceiptTemplate") {
     template = TEMPLATES[type](

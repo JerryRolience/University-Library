@@ -2,6 +2,8 @@ import { serve } from "@upstash/workflow/nextjs";
 import { sendEmail } from "@/lib/email/send-email";
 import { fetchRequest } from "@/lib/api";
 
+// non-active = 3days of inactivity
+// inactive = 30 days of inactivity
 type UserState = "non-active" | "inactive" | "active";
 
 type InitialData = {
@@ -37,7 +39,7 @@ export const { POST } = serve<InitialData>(async (context) => {
       });
     } else if (state === "inactive") {
       await context.run("send-email-inactive", async () => {
-        await sendEmail("inactive", email, { fullName });
+        await sendEmail("checkInTemplate", email, { fullName });
       });
     }
 

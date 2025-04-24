@@ -1,16 +1,16 @@
-export const bookDueReminderTemplate = (
+export const bookDueDateReminderTemplate = (
   name: string,
   bookTitle: string,
   dueDate: string,
   renewUrl: string
 ) => ({
-  subject: `Reminder: ${bookTitle} is Due Soon!`,
+  subject: `📅 Today's the Day: Return "${bookTitle}"`,
   html: `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <style type="text/css">
-          body {
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style type="text/css">
+            body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #333333;
@@ -43,14 +43,6 @@ export const bookDueReminderTemplate = (
             font-weight: 600;
             color: #111827;
           }
-          .reminder-box {
-            background-color: #F0FDF4;
-            border-left: 4px solid #16A34A;
-            padding: 16px;
-            margin: 20px 0;
-            border-radius: 4px;
-            text-align: center;
-          }
           .button-container {
             text-align: center;
             margin: 25px 0;
@@ -71,47 +63,45 @@ export const bookDueReminderTemplate = (
             color: #6B7280;
             text-align: center;
           }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <div class="logo">BookWise</div>
-          <h2>Reminder: ${bookTitle} is Due Soon!</h2>
-        </div>
-        
-        <p>Hi ${name},</p>
-        
-        <div class="reminder-box">
-          <p>Just a reminder that <span class="highlight">${bookTitle}</span> is due for return on <span class="highlight">${dueDate}</span>.</p>
-          <p>Kindly return it on time to avoid late fees.</p>
-        </div>
-        
-        <p>If you're still reading, you can renew the book in your account.</p>
-        
-        <div class="button-container">
-          <a href="${renewUrl}" class="button">Renew Book Now</a>
-        </div>
-        
-        <p>Keep reading,<br>The BookWise Team</p>
-        
-        <div class="footer">
-          © ${new Date().getFullYear()} BookWise. All rights reserved.
-        </div>
-      </body>
-      </html>
-    `,
-  text: `
-      BookWise - Book Due Reminder
+        .reminder-box {
+          background-color: #FEF3C7;
+          border-left: 4px solid #F59E0B;
+          padding: 16px;
+          margin: 20px 0;
+          border-radius: 4px;
+        }
+        .urgent {
+          color: #B45309;
+          font-weight: 600;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div class="logo">BookWise</div>
+        <h2>Return "${bookTitle}" Today</h2>
+      </div>
       
-      Hi ${name},
+      <p>Hi ${name},</p>
       
-      Reminder: ${bookTitle} is due for return on ${dueDate}.
-      Kindly return it on time to avoid late fees.
+      <div class="reminder-box">
+        <p><span class="urgent">Today is the due date</span> for <span class="highlight">${bookTitle}</span>.</p>
+        <p>Please return it by end of day to avoid late fees.</p>
+      </div>
       
-      If you're still reading, you can renew the book in your account:
-      ${renewUrl}
+      <p style="text-align: center;">Still reading? Renew before midnight:</p>
       
-      Keep reading,
-      The BookWise Team
-    `,
+      <div style="text-align: center; margin: 25px 0;">
+        <a href="${renewUrl}" class="button">Renew Now</a>
+      </div>
+      
+      <p>Thank you!<br>The BookWise Team</p>
+      
+      <div class="footer">
+        © ${new Date().getFullYear()} BookWise. All rights reserved.
+      </div>
+    </body>
+    </html>
+  `,
+  text: `BookWise Due Today\n\nHi ${name},\n\n"${bookTitle}" is due TODAY (${dueDate}). Please return or renew:\n${renewUrl}\n\nAvoid late fees!\nThe BookWise Team`,
 });
