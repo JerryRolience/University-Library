@@ -120,7 +120,7 @@ export default function BookContainer({ item }: { item: BorrowedBook }) {
         >
           {({ loading }) => (
             <button
-              className="text-light-100 hover:text-primary transition-colors flex items-center gap-1"
+              className="text-light-100 hover:text-primary transition-colors flex items-center gap-2"
               aria-label={`Download receipt for ${item.bookDetail.title}`}
               disabled={loading}
             >
@@ -128,7 +128,7 @@ export default function BookContainer({ item }: { item: BorrowedBook }) {
               {loading ? (
                 <p className="text-xs">Generating...</p>
               ) : (
-                <span className="text-xs">Generate Receipt</span>
+                <span className="text-xs">Receipt</span>
               )}
             </button>
           )}
