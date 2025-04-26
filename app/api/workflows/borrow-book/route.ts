@@ -20,25 +20,21 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
     ctx.requestPayload;
 
   // Step 1: Send confirmation email
-  try {
-    await ctx.run("send-borrow-confirmation", async () => {
-      await sendEmail("bookBorrowedTemplate", email, {
-        fullName,
-        bookTitle,
-        borrowDate: formatDate(borrowDate),
-        dueDate: formatDate(dueDate),
-      });
-
-      await sendEmail("bookReceiptTemplate", email, {
-        fullName,
-        bookTitle,
-        borrowDate: formatDate(borrowDate),
-        dueDate: formatDate(dueDate),
-      });
+  await ctx.run("send-borrow-confirmation", async () => {
+    await sendEmail("bookBorrowedTemplate", email, {
+      fullName,
+      bookTitle,
+      borrowDate: formatDate(borrowDate),
+      dueDate: formatDate(dueDate),
     });
-  } catch (error) {
-    console.error("Failed to send borrow confirmation:", error);
-  }
+
+    await sendEmail("bookReceiptTemplate", email, {
+      fullName,
+      bookTitle,
+      borrowDate: formatDate(borrowDate),
+      dueDate: formatDate(dueDate),
+    });
+  });
 
   // Step 2: Prepare dates
   const due = new Date(
@@ -54,20 +50,16 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
   }
 
   // Step 4: Send reminder if not returned
-  try {
-    await ctx.run("send-pre-due-reminder", async () => {
-      const status = await getBorrowStatus(borrowId);
-      if (status === "BORROWED") {
-        await sendEmail("bookPreDueReminderTemplate", email, {
-          fullName,
-          bookTitle,
-          dueDate: formatDate(dueDate),
-        });
-      }
-    });
-  } catch (error) {
-    console.error("Failed to send pre-due reminder:", error);
-  }
+  await ctx.run("send-pre-due-reminder", async () => {
+    const status = await getBorrowStatus(borrowId);
+    if (status === "BORROWED") {
+      await sendEmail("bookPreDueReminderTemplate", email, {
+        fullName,
+        bookTitle,
+        dueDate: formatDate(dueDate),
+      });
+    }
+  });
 
   // Step 5: Wait until dueDate
   const msUntilDue = due.getTime() - now.getTime();
@@ -76,20 +68,16 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
   }
 
   // Step 6: Send due date reminder
-  try {
-    await ctx.run("send-due-date-reminder", async () => {
-      const status = await getBorrowStatus(borrowId);
-      if (status === "BORROWED") {
-        await sendEmail("bookDueDateReminderTemplate", email, {
-          fullName,
-          bookTitle,
-          dueDate,
-        });
-      }
-    });
-  } catch (error) {
-    console.error("Failed to send due date reminder:", error);
-  }
+  await ctx.run("send-due-date-reminder", async () => {
+    const status = await getBorrowStatus(borrowId);
+    if (status === "BORROWED") {
+      await sendEmail("bookDueDateReminderTemplate", email, {
+        fullName,
+        bookTitle,
+        dueDate,
+      });
+    }
+  });
 
   // Step 7: Overdue loop (every 5 days, max 12 times)
   let overdueCount = 0;
@@ -114,18 +102,14 @@ export const { POST } = serve<BorrowPayload>(async (ctx) => {
       ctx.cancel();
     }
 
-    try {
-      await ctx.run(`send-overdue-reminder-${overdueCount}`, async () => {
-        await sendEmail("bookOverdueTemplate", email, {
-          fullName,
-          bookTitle,
-          dueDate: formatDate(dueDate),
-          daysOverdue: overdueCount * 5,
-        });
+    await ctx.run(`send-overdue-reminder-${overdueCount}`, async () => {
+      await sendEmail("bookOverdueTemplate", email, {
+        fullName,
+        bookTitle,
+        dueDate: formatDate(dueDate),
+        daysOverdue: overdueCount * 5,
       });
-    } catch (error) {
-      console.error("Failed to send overdue reminder:", error);
-    }
+    });
 
     if (overdueCount >= 12) break;
   }

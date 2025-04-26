@@ -9,13 +9,9 @@ type RejectAccountPayload = {
 export const { POST } = serve<RejectAccountPayload>(async (context) => {
   const { fullName, email }: RejectAccountPayload = context.requestPayload;
 
-  try {
-    await context.run("send-accept-account-confirmation", async () => {
-      await sendEmail("accountApprovalTemplate", email, {
-        fullName,
-      });
+  await context.run("send-accept-account-confirmation", async () => {
+    await sendEmail("accountApprovalTemplate", email, {
+      fullName,
     });
-  } catch (error) {
-    console.error("Failed to send accept  account confirmation:", error);
-  }
+  });
 });
