@@ -14,13 +14,14 @@ const layout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      router.push(`/sign-in`);
+    if (!loading) {
+      if (!isAuthenticated) {
+        router.push("/sign-in");
+      } else if (user && !["ADMIN", "SUPER_ADMIN"].includes(user.role)) {
+        router.push("/");
+      }
     }
-    // if (user?.role !== "ADMIN") {
-    //   router.push("/");
-    // }
-  }, [isAuthenticated, loading, router]);
+  }, [isAuthenticated, loading, user, router]);
 
   if (loading) {
     return <LoadingPage text="Loading admin page ..." />;

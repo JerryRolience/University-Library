@@ -6,9 +6,11 @@ import { DeleteAlertDialog } from "../home/DeleteAlertDialog";
 
 interface Prop {
   type: "ALL USERS" | "ACCOUNT REQUEST";
+  user: any;
+  fetchUsers?: () => Promise<void>;
 }
 
-export function ActionButtons({ type }: Prop) {
+export function ActionButtons({ type, user, fetchUsers }: Prop) {
   const allUsers = type === "ALL USERS";
   const [alertType, setAlertType] = useState<"Delete User" | null>(null);
 
@@ -47,12 +49,15 @@ export function ActionButtons({ type }: Prop) {
           onOpenChange={(open) => {
             if (!open) setDialogType(null);
           }}
+          user={user}
+          fetchUsers={fetchUsers}
         />
       )}
 
       {alertType && (
         <DeleteAlertDialog
           type="Delete User"
+          bookId="123"
           open={!!alertType}
           onOpenChange={(open) => {
             if (!open) setAlertType(null);

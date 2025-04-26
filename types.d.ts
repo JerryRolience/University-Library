@@ -118,6 +118,7 @@ interface UserTableProps {
   loadingUsers: boolean;
   errorUsers: string | null;
   sortByName: () => void;
+  fetchUsers: () => Promise<void>;
 }
 
 interface UserContextType {
@@ -208,8 +209,20 @@ interface DropdownOption {
   backgroundColor: string;
 }
 
+interface StatusAlertDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onConfirm: () => void;
+  user: {
+    role: string;
+  };
+}
+
+type ROLES = "ADMIN" | "SUPER_ADMIN" | "USER" | "STUDENT";
+
 interface StatusDropdownProps<T extends string> {
-  currentValue: string;
+  currentValue: "ADMIN" | "SUPER_ADMIN" | "USER";
+  onStatusChange: (newValue: ROLES) => void;
   options: DropdownOption[];
   className?: string;
 }
@@ -218,6 +231,8 @@ interface ActionDialogProps {
   type: "Approve Account Request" | "Deny Account Request";
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  user: any;
+  fetchUsers?: () => Promise<void>;
 }
 
 interface DeleteAlertDialogProps {

@@ -23,6 +23,7 @@ export function TableComponent({
   sortAsc,
   loadingUsers,
   errorUsers,
+  fetchUsers,
 }: UserTableProps) {
   const commonHeaders = getUserTableHeaders(type);
 
@@ -60,7 +61,12 @@ export function TableComponent({
               <TableStateRow message="No Records found" />
             ) : (
               initialUsers.map((user, index) => (
-                <UserRow key={index} user={user} type={type} />
+                <UserRow
+                  key={index}
+                  user={user}
+                  type={type}
+                  fetchUsers={fetchUsers}
+                />
               ))
             )}
           </TableBody>

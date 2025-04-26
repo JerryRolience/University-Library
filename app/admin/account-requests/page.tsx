@@ -4,7 +4,7 @@ import { TableComponent } from "@/components/admin/users/table/Table";
 import { useUserContext } from "@/contexts/UserContext";
 
 const AccountRequestPage = () => {
-  const { users, loadingUsers, errorUsers, sortAsc, sortByName } =
+  const { users, loadingUsers, errorUsers, sortAsc, sortByName, fetchUsers } =
     useUserContext();
   const accountRequestUsers = users.filter((u) => u.status === "PENDING");
 
@@ -19,6 +19,7 @@ const AccountRequestPage = () => {
         sortByName={sortByName}
         loadingUsers={loadingUsers}
         errorUsers={errorUsers}
+        fetchUsers={fetchUsers}
       />
     </div>
   );

@@ -62,7 +62,7 @@ export function BorrowComponent() {
 
   const displayedBooks = borrowRecords.slice(0, 3);
 
-  if (borrowRecords.length < 0) {
+  if (borrowRecords.length === 0) {
     return <LeftNoResult type="Borrow Records" />;
   }
 

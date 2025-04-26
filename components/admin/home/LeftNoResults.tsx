@@ -6,9 +6,6 @@ export function LeftNoResult({ type }: { type: string }) {
     <div className="flex-1 bg-white rounded-2xl shadow p-6  ">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold mb-4">{type}</h3>
-        <Button className="text-primary-admin bg-[#F8F8FF] hover:bg-primary-admin/15">
-          View All
-        </Button>
       </div>
       <div className="flex flex-col items-center my-9">
         <Image

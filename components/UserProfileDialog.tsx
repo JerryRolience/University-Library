@@ -22,7 +22,7 @@ export function UserProfileDialog({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[90vw]  max-w-md bg-gradient-to-b from-[#12141D] to-[#12151F]  border border-dark-100 hover:border-primary/30 transition-colors ">
+      <DialogContent className="w-[90vw] max-w-md bg-gradient-to-b from-[#12141D] to-[#12151F] border border-dark-100 hover:border-primary/30 transition-colors flex flex-col max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="text-primary text-center mb-3">
             Edit your ID details

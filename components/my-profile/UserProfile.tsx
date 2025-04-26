@@ -1,17 +1,15 @@
+import config from "@/lib/config";
 import { User } from "@/types";
+import { IKImage } from "imagekitio-next";
 import Image from "next/image";
-import { FiEdit2 } from "react-icons/fi";
-import { IoLogOutOutline, IoSettingsOutline } from "react-icons/io5";
+import { JSX } from "react";
 import {
   FaCheckCircle,
   FaClock,
-  FaTimesCircle,
   FaInfoCircle,
+  FaTimesCircle,
+  FaUserEdit,
 } from "react-icons/fa";
-import { JSX } from "react";
-import { IKImage } from "imagekitio-next";
-import config from "@/lib/config";
-import { FaUserEdit } from "react-icons/fa";
 import { ActionButtons } from "./ActionButtons";
 
 export default function UserProfile({
