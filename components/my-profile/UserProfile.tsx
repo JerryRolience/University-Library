@@ -174,6 +174,7 @@ export default function UserProfile({
           isLoggingOut={isLoggingOut}
           handleLogout={handleLogout}
           handleProfileEdit={handleProfileEdit}
+          email={user?.email || ""}
         />
       </div>
     </div>

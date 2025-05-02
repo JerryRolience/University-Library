@@ -21,29 +21,72 @@ import {
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Input } from "../ui/input";
+import { fetchRequest } from "@/lib/api";
+import { toast } from "sonner";
 
 export function ActionButtons({
   isLoggingOut,
   handleLogout,
   handleProfileEdit,
+  email,
 }: {
   isLoggingOut: boolean;
   handleLogout: () => void;
   handleProfileEdit: () => void;
+  email: string;
 }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const handleDeleteAccount = () => {
+  function handleAccountRecovery(email: string): void {
+    console.log("Account recovery initiated for user ID:", email);
+  }
+
+  const handleDeleteAccount = async () => {
     setIsDeleting(true);
-    //  account deletion logic
-    console.log("Account deletion confirmed");
-    // After deletion is complete:
-    setIsDeleting(false);
-    setConfirmationText("");
-    handleLogout();
+
+    try {
+      // Validate confirmation text first (if you have it)
+      if (confirmationText !== "DELETE ACCOUNT") {
+        throw new Error("Please type the confirmation phrase correctly");
+      }
+
+      const uri = `${process.env.NEXT_PUBLIC_API}/user/delete-user`;
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("Authentication required");
+      }
+
+      const response = await fetchRequest(uri, "POST", { email }, token);
+
+      if (!response.ok) {
+        throw new Error(response.data?.message || "Account deletion failed");
+      }
+
+      // Success handling
+      toast.success("Account deleted", {
+        description: "All your data has been permanently removed",
+        action: {
+          label: "Undo",
+          onClick: () => handleAccountRecovery(email), // If you implement recovery
+        },
+        style: { backgroundColor: "green", color: "#fff" },
+      });
+
+      // Redirect after delay
+      setTimeout(() => handleLogout(), 1500);
+    } catch (error) {
+      toast.error("Deletion failed", {
+        description:
+          error instanceof Error ? error.message : "Please try again later",
+        style: { backgroundColor: "red", color: "#fff" },
+      });
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleDialogClose = () => {
