@@ -10,7 +10,7 @@ import { CiEdit } from "react-icons/ci";
 import { DeleteAlertDialog } from "../home/DeleteAlertDialog";
 import Link from "next/link";
 
-export function BookTableRow({ book }: { book: DataBaseBooks }) {
+export function BookTableRow({ book, fetchBooks }: { book: DataBaseBooks; fetchBooks: () => Promise<void> }) {
   const [dialogType, setDialogType] = useState<"Delete Book" | null>(null);
 
   const handleDelete = () => setDialogType("Delete Book");
@@ -21,17 +21,10 @@ export function BookTableRow({ book }: { book: DataBaseBooks }) {
         <Link href={`/admin/books/book/${book.id}`}>
           <div className="flex items-center gap-3">
             <div className="h-[34.88px] w-[25.47px]">
-              <BookCover
-                variant="extraSmall"
-                className="z-10"
-                coverColor={book.coverColor}
-                coverImage={book.coverUrl}
-              />
+              <BookCover variant="extraSmall" className="z-10" coverColor={book.coverColor} coverImage={book.coverUrl} />
             </div>
             <div className="min-w-0 max-w-full">
-              <div className="truncate whitespace-nowrap overflow-hidden text-ellipsis font-bold text-lg">
-                {book.title}
-              </div>
+              <div className="truncate whitespace-nowrap overflow-hidden text-ellipsis font-bold text-lg">{book.title}</div>
             </div>
           </div>
         </Link>
@@ -52,10 +45,11 @@ export function BookTableRow({ book }: { book: DataBaseBooks }) {
               <DeleteAlertDialog
                 type={dialogType}
                 open={!!dialogType}
-                bookId={book.id}
                 onOpenChange={(open) => {
                   if (!open) setDialogType(null);
                 }}
+                book={{ bookId: book.id, bookTitle: book.title }}
+                fetchBooks={fetchBooks}
               />
             )}
           </div>

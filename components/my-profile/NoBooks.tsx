@@ -11,7 +11,7 @@ export default function NoBooks() {
         You haven't borrowed any books yet
       </p>
       <Button
-        className="mt-3 sm:mt-4 px-4 py-2 bg-primary hover:bg-primary/90 rounded-lg text-light-100 transition-colors text-sm sm:text-base"
+        className="mt-3 sm:mt-4 px-4 py-2 bg-primary hover:bg-primary/90 rounded-lg text-dark-100 transition-colors text-sm sm:text-base"
         onClick={() => router.push("/")}
       >
         Browse Books

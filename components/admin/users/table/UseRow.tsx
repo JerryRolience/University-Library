@@ -37,15 +37,7 @@ const roleOptions: DropdownOption[] = [
   },
 ];
 
-export function UserRow({
-  user,
-  type,
-  fetchUsers,
-}: {
-  user: any;
-  type: "ALL USERS" | "ACCOUNT REQUEST";
-  fetchUsers: () => Promise<void>;
-}) {
+export function UserRow({ user, type, fetchUsers }: { user: any; type: "ALL USERS" | "ACCOUNT REQUEST"; fetchUsers: () => Promise<void> }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [userRole, setUserRole] = useState(user.role);
 
@@ -102,11 +94,7 @@ export function UserRow({
         <>
           <TableCell className="min-w-[150px]">
             <div className="w-full flex justify-center">
-              <StatusDropdown
-                currentValue={userRole}
-                options={roleOptions}
-                onStatusChange={handleStatusChange}
-              />
+              <StatusDropdown currentValue={userRole} options={roleOptions} onStatusChange={handleStatusChange} />
             </div>
           </TableCell>
           <TableCell className="text-sm">{user.booksBorrowed}</TableCell>
@@ -114,20 +102,11 @@ export function UserRow({
       )}
       <TableCell className="text-sm">{user.universityID}</TableCell>
       <TableCell>
-        <button
-          onClick={() => setOpenDialog(true)}
-          className="text-blue-600 hover:underline flex items-center gap-1 text-sm"
-        >
+        <button onClick={() => setOpenDialog(true)} className="text-blue-600 hover:underline flex items-center gap-1 text-sm">
           View ID Card <ExternalLink size={14} />
         </button>
 
-        {openDialog && (
-          <ViewCardDialog
-            IDCard={user.universityCard}
-            open={openDialog}
-            onOpenChange={setOpenDialog}
-          />
-        )}
+        {openDialog && <ViewCardDialog IDCard={user.universityCard} open={openDialog} onOpenChange={setOpenDialog} />}
       </TableCell>
       <TableCell className="pr-4">
         <ActionButtons type={type} user={user} fetchUsers={fetchUsers} />

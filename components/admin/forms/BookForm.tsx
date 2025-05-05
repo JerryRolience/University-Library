@@ -3,14 +3,7 @@
 import { BookFormProps } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
@@ -43,10 +36,7 @@ export default function BookForm({ type, book }: BookFormProps) {
   });
 
   const onSubmit = async (values: z.infer<typeof bookSchema>) => {
-    const uri =
-      type === "create"
-        ? `${process.env.NEXT_PUBLIC_API}/book/create-book`
-        : `${process.env.NEXT_PUBLIC_API}/book/update-book`;
+    const uri = type === "create" ? `${process.env.NEXT_PUBLIC_API}/book/create-book` : `${process.env.NEXT_PUBLIC_API}/book/update-book`;
 
     const storedToken = localStorage.getItem("token");
     const responseData = await fetchRequest(uri, "POST", values, storedToken);
@@ -62,9 +52,7 @@ export default function BookForm({ type, book }: BookFormProps) {
 
     if (!responseData.ok) {
       toast.error("Error adding book. Please try again.", {
-        description:
-          responseData.data?.message ||
-          "Something went wrong, please try again.",
+        description: responseData.data?.message || "Something went wrong, please try again.",
         style: { backgroundColor: "red", color: "#fff" },
       });
       return;
@@ -74,7 +62,7 @@ export default function BookForm({ type, book }: BookFormProps) {
       toast.success("Book added successfully.", {
         style: { backgroundColor: "green", color: "#fff" },
       });
-      router.push(`/admin/books/${responseData.data.data.id}`);
+      router.push(`/admin/books/book/${responseData.data.data.id}`);
     }
   };
 
@@ -86,16 +74,9 @@ export default function BookForm({ type, book }: BookFormProps) {
           name={"title"}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-base font-normal text-dark-500">
-                Book Title
-              </FormLabel>
+              <FormLabel className="text-base font-normal text-dark-500">Book Title</FormLabel>
               <FormControl>
-                <Input
-                  required
-                  placeholder="Book Title"
-                  {...field}
-                  className="book-form_input"
-                />
+                <Input required placeholder="Book Title" {...field} className="book-form_input" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -107,16 +88,9 @@ export default function BookForm({ type, book }: BookFormProps) {
           name={"author"}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-base font-normal text-dark-500">
-                Author
-              </FormLabel>
+              <FormLabel className="text-base font-normal text-dark-500">Author</FormLabel>
               <FormControl>
-                <Input
-                  required
-                  placeholder="Book author"
-                  {...field}
-                  className="book-form_input"
-                />
+                <Input required placeholder="Book author" {...field} className="book-form_input" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -128,16 +102,9 @@ export default function BookForm({ type, book }: BookFormProps) {
           name={"genre"}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-base font-normal text-dark-500">
-                Genre
-              </FormLabel>
+              <FormLabel className="text-base font-normal text-dark-500">Genre</FormLabel>
               <FormControl>
-                <Input
-                  required
-                  placeholder="Book genre"
-                  {...field}
-                  className="book-form_input"
-                />
+                <Input required placeholder="Book genre" {...field} className="book-form_input" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -149,19 +116,9 @@ export default function BookForm({ type, book }: BookFormProps) {
           name={"rating"}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-base font-normal text-dark-500">
-                Rating
-              </FormLabel>
+              <FormLabel className="text-base font-normal text-dark-500">Rating</FormLabel>
               <FormControl>
-                <Input
-                  required
-                  type="number"
-                  min={1}
-                  max={5}
-                  placeholder="Book rating"
-                  {...field}
-                  className="book-form_input"
-                />
+                <Input required type="number" min={1} max={5} placeholder="Book rating" {...field} className="book-form_input" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -173,19 +130,9 @@ export default function BookForm({ type, book }: BookFormProps) {
           name={"totalCopies"}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-base font-normal text-dark-500">
-                Total Copies
-              </FormLabel>
+              <FormLabel className="text-base font-normal text-dark-500">Total Copies</FormLabel>
               <FormControl>
-                <Input
-                  required
-                  type="number"
-                  min={1}
-                  max={10000}
-                  placeholder="Total copies"
-                  {...field}
-                  className="book-form_input"
-                />
+                <Input required type="number" min={1} max={10000} placeholder="Total copies" {...field} className="book-form_input" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -197,20 +144,10 @@ export default function BookForm({ type, book }: BookFormProps) {
           name={"coverUrl"}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-base font-normal text-dark-500">
-                Book Image
-              </FormLabel>
+              <FormLabel className="text-base font-normal text-dark-500">Book Image</FormLabel>
               <FormControl>
                 {/* File Upload */}
-                <FileUpload
-                  onFileChange={field.onChange}
-                  value={field.value}
-                  type="image"
-                  accept="image/*"
-                  placeholder="Upload a book cover"
-                  folder="books/covers"
-                  variant="light"
-                />
+                <FileUpload onFileChange={field.onChange} value={field.value} type="image" accept="image/*" placeholder="Upload a book cover" folder="books/covers" variant="light" />
               </FormControl>
 
               <FormMessage />
@@ -223,15 +160,10 @@ export default function BookForm({ type, book }: BookFormProps) {
           name={"coverColor"}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-base font-normal text-dark-500">
-                Primary Color
-              </FormLabel>
+              <FormLabel className="text-base font-normal text-dark-500">Primary Color</FormLabel>
               <FormControl>
                 {/* Color Picker*/}
-                <ColorPicker
-                  value={field.value}
-                  onPickerChange={field.onChange}
-                />
+                <ColorPicker value={field.value} onPickerChange={field.onChange} />
               </FormControl>
 
               <FormMessage />
@@ -244,16 +176,9 @@ export default function BookForm({ type, book }: BookFormProps) {
           name={"description"}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-base font-normal text-dark-500">
-                Book Description
-              </FormLabel>
+              <FormLabel className="text-base font-normal text-dark-500">Book Description</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Book description"
-                  {...field}
-                  rows={10}
-                  className="book-form_input"
-                />
+                <Textarea placeholder="Book description" {...field} rows={10} className="book-form_input" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -265,20 +190,10 @@ export default function BookForm({ type, book }: BookFormProps) {
           name={"videoUrl"}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-base font-normal text-dark-500">
-                Book Trailer
-              </FormLabel>
+              <FormLabel className="text-base font-normal text-dark-500">Book Trailer</FormLabel>
               <FormControl>
                 {/* File Upload */}
-                <FileUpload
-                  onFileChange={field.onChange}
-                  value={field.value}
-                  type="video"
-                  accept="video/*"
-                  placeholder="Upload a book trailer"
-                  folder="books/videos"
-                  variant="light"
-                />
+                <FileUpload onFileChange={field.onChange} value={field.value} type="video" accept="video/*" placeholder="Upload a book trailer" folder="books/videos" variant="light" />
               </FormControl>
 
               <FormMessage />
@@ -291,16 +206,9 @@ export default function BookForm({ type, book }: BookFormProps) {
           name={"summary"}
           render={({ field }) => (
             <FormItem className="flex flex-col gap-1">
-              <FormLabel className="text-base font-normal text-dark-500">
-                Book summary
-              </FormLabel>
+              <FormLabel className="text-base font-normal text-dark-500">Book summary</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Book summary"
-                  {...field}
-                  rows={5}
-                  className="book-form_input"
-                />
+                <Textarea placeholder="Book summary" {...field} rows={5} className="book-form_input" />
               </FormControl>
               <FormMessage />
             </FormItem>

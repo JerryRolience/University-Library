@@ -8,15 +8,17 @@ interface Prop {
   type: "ALL USERS" | "ACCOUNT REQUEST";
   user: any;
   fetchUsers?: () => Promise<void>;
+  book?: {
+    bookId: string;
+    bookTitle: string;
+  };
 }
 
-export function ActionButtons({ type, user, fetchUsers }: Prop) {
+export function ActionButtons({ type, user, fetchUsers, book }: Prop) {
   const allUsers = type === "ALL USERS";
   const [alertType, setAlertType] = useState<"Delete User" | null>(null);
 
-  const [dialogType, setDialogType] = useState<
-    "Approve Account Request" | "Deny Account Request" | null
-  >(null);
+  const [dialogType, setDialogType] = useState<"Approve Account Request" | "Deny Account Request" | null>(null);
 
   return (
     <>
@@ -27,15 +29,14 @@ export function ActionButtons({ type, user, fetchUsers }: Prop) {
       ) : (
         <div className="flex items-center gap-6">
           <Button
-            onClick={() => setDialogType("Approve Account Request")}
+            onClick={() => {
+              setDialogType("Approve Account Request");
+            }}
             className="bg-[#a7dabc] hover:bg-green-200"
           >
             Approve Account
           </Button>
-          <button
-            onClick={() => setDialogType("Deny Account Request")}
-            className="text-red-400 hover:text-red-600"
-          >
+          <button onClick={() => setDialogType("Deny Account Request")} className="text-red-400 hover:text-red-600">
             <CircleX size={24} />
           </button>
         </div>
@@ -57,11 +58,13 @@ export function ActionButtons({ type, user, fetchUsers }: Prop) {
       {alertType && (
         <DeleteAlertDialog
           type="Delete User"
-          bookId="123"
+          book={book || { bookId: "", bookTitle: "" }}
           open={!!alertType}
           onOpenChange={(open) => {
             if (!open) setAlertType(null);
           }}
+          fetchUsers={fetchUsers}
+          user={user}
         />
       )}
     </>

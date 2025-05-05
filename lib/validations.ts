@@ -2,27 +2,24 @@ import { profile } from "console";
 import { z } from "zod";
 
 // Common password validation reusable across schemas
-const passwordValidation = z
-  .string()
-  .min(8, "Password must be at least 8 characters long")
-  .max(64, "Password cannot exceed 64 characters")
-  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-  .regex(/[0-9]/, "Password must contain at least one number")
-  .regex(
-    /[^A-Za-z0-9]/,
-    "Password must contain at least one special character (e.g., !@#$%^&*)"
-  )
-  .refine(
-    (password) => !password.includes(" "),
-    "Password cannot contain spaces"
-  );
+// const passwordValidation = z
+//   .string()
+//   .min(8, "Password must be at least 8 characters long")
+//   .max(64, "Password cannot exceed 64 characters")
+//   .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+//   .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+//   .regex(/[0-9]/, "Password must contain at least one number")
+//   .regex(
+//     /[^A-Za-z0-9]/,
+//     "Password must contain at least one special character (e.g., !@#$%^&*)"
+//   )
+//   .refine(
+//     (password) => !password.includes(" "),
+//     "Password cannot contain spaces"
+//   );
 
 export const signUpSchema = z.object({
-  fullName: z
-    .string()
-    .min(3, "Full name must be at least 3 characters")
-    .max(50, "Full name cannot exceed 50 characters"),
+  fullName: z.string().min(3, "Full name must be at least 3 characters").max(50, "Full name cannot exceed 50 characters"),
   email: z.string().email("Please enter a valid email address"),
   universityId: z.string().refine(
     (val) => {
@@ -38,12 +35,11 @@ export const signUpSchema = z.object({
       return fullYear >= 2020 && fullYear <= 2030;
     },
     {
-      message:
-        "University ID must be in format: ABC/1234/20-30 (where last digits represent year 2020-2030)",
+      message: "University ID must be in format: ABC/1234/20-30 (where last digits represent year 2020-2030)",
     }
   ),
   universityCard: z.string().nonempty("University card image is required"),
-  password: passwordValidation,
+  password: z.string().min(8, "Password must be at least 8 characters long").max(64, "Password cannot exceed 64 characters"),
 });
 
 export const editIDDetailsSchema = z.object({
@@ -61,18 +57,14 @@ export const editIDDetailsSchema = z.object({
       return fullYear >= 2020 && fullYear <= 2030;
     },
     {
-      message:
-        "University ID must be in format: ABC/1234/20-30 (where last digits represent year 2020-2030)",
+      message: "University ID must be in format: ABC/1234/20-30 (where last digits represent year 2020-2030)",
     }
   ),
   universityCard: z.string().nonempty("University card image is required"),
 });
 
 export const editProfileSchema = z.object({
-  fullName: z
-    .string()
-    .min(3, "Full name must be at least 3 characters")
-    .max(50, "Full name cannot exceed 50 characters"),
+  fullName: z.string().min(3, "Full name must be at least 3 characters").max(50, "Full name cannot exceed 50 characters"),
   email: z.string().email("Please enter a valid email address"),
   profilePic: z.string().nonempty("Profile picture is required"),
 });

@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useCallback, useEffect, useState } from "react";
 import { bookTitles } from "@/constants";
 import { DataBaseBooks } from "@/types";
@@ -27,12 +21,7 @@ export function BookTableComponent() {
     setLoadingBooks(true);
     setErrorBooks(null);
     try {
-      const response = await fetchRequest(
-        `${process.env.NEXT_PUBLIC_API}/book/get-books`,
-        "GET",
-        undefined,
-        token
-      );
+      const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/book/get-books`, "GET", undefined, token);
 
       if (response.ok) {
         setBooks(response.data || []);
@@ -55,9 +44,7 @@ export function BookTableComponent() {
     }
   }, [fetchBooks, token]);
 
-  const sortedBooks = [...books].sort((a, b) =>
-    sortAsc ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)
-  );
+  const sortedBooks = [...books].sort((a, b) => (sortAsc ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)));
 
   const sortByName = () => {
     setSortAsc(!sortAsc);
@@ -65,22 +52,13 @@ export function BookTableComponent() {
 
   return (
     <div className="w-full bg-white max-w-full mx-auto rounded-xl shadow border border-gray-200 px-6 pt-6 pb-4">
-      <UserTableHeader
-        sort="A-Z"
-        title="All Books"
-        sortAsc={sortAsc}
-        sortByName={sortByName}
-        errorUsers={errorBooks}
-      />
+      <UserTableHeader sort="A-Z" title="All Books" sortAsc={sortAsc} sortByName={sortByName} errorUsers={errorBooks} />
       <div className="overflow-x-auto">
         <Table>
           <TableHeader className="h-14 rounded-md">
             <TableRow className="bg-light-300 hover:bg-light-300">
               {bookTitles.map((title, index) => (
-                <TableHead
-                  key={index}
-                  className="uppercase text-xs font-semibold text-gray-700"
-                >
+                <TableHead key={index} className="uppercase text-xs font-semibold text-gray-700">
                   {title}
                 </TableHead>
               ))}
@@ -94,9 +72,7 @@ export function BookTableComponent() {
             ) : sortedBooks.length === 0 ? (
               <TableStateRow message="No Books found" />
             ) : (
-              sortedBooks.map((book, index) => (
-                <BookTableRow key={index} book={book} />
-              ))
+              sortedBooks.map((book, index) => <BookTableRow key={index} book={book} fetchBooks={fetchBooks} />)
             )}
           </TableBody>
         </Table>

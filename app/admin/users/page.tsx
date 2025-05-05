@@ -4,7 +4,7 @@ import { TableComponent } from "@/components/admin/users/table/Table";
 import { useUserContext } from "@/contexts/UserContext";
 
 const AllUsersPage = () => {
-  const { users, loadingUsers, errorUsers, sortAsc, sortByName } =
+  const { users, loadingUsers, errorUsers, sortAsc, sortByName, fetchUsers } =
     useUserContext();
 
   return (
@@ -18,6 +18,7 @@ const AllUsersPage = () => {
         sortByName={sortByName}
         loadingUsers={loadingUsers}
         errorUsers={errorUsers}
+        fetchUsers={fetchUsers}
       />
     </div>
   );

@@ -52,13 +52,7 @@ interface BorrowRecords {
   ReturnedDate?: Date;
 }
 
-type BookCoverVariant =
-  | "extraSmall"
-  | "small"
-  | "medium"
-  | "regular"
-  | "wide"
-  | "borrow";
+type BookCoverVariant = "extraSmall" | "small" | "medium" | "regular" | "wide" | "borrow";
 
 interface BookCoverProps {
   className?: string;
@@ -238,8 +232,15 @@ interface ActionDialogProps {
 interface DeleteAlertDialogProps {
   type: "Delete User" | "Delete Book";
   open: boolean;
-  bookId: string;
+  book: {
+    bookId: string;
+    bookTitle: string;
+  };
   onOpenChange: (open: boolean) => void;
+  fetchUsers?: () => Promise<void>;
+  fetchBooks?: () => Promise<void>;
+
+  user?: User;
 }
 
 interface ViewCardDialogProps {
