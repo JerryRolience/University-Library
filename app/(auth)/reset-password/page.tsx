@@ -43,7 +43,7 @@ export default function ResetPasswordPage() {
 
     const validateToken = async () => {
       try {
-        const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/auth/validate-password-token`, "POST", { token, sig });
+        const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/api/auth/validate-password-token`, "POST", { token, sig });
         if (!response.data?.valid) throw new Error("Invalid token");
       } catch (error) {
         router.push("/forgot-password?error=invalid_token");
@@ -71,7 +71,7 @@ export default function ResetPasswordPage() {
 
     setIsLoading(true);
     try {
-      const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/auth/reset-password`, "POST", {
+      const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/api/auth/reset-password`, "POST", {
         token,
         sig,
         newPassword: values.password,

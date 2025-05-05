@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
 
     try {
       const normalizedEmail = values.email.toLowerCase().trim();
-      const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/auth/forgot-password`, "POST", { email: normalizedEmail });
+      const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/api/auth/forgot-password`, "POST", { email: normalizedEmail });
 
       if (!response.ok) throw new Error(response.data?.message || "Failed to send reset link");
 
