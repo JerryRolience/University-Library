@@ -73,6 +73,7 @@ export default function ResetPasswordPage() {
     try {
       const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/auth/reset-password`, "POST", {
         token,
+        sig,
         newPassword: values.password,
       });
 
