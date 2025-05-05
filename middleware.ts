@@ -2,20 +2,16 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
-  const authRoutes = ["/sign-in", "/sign-up"];
+  const authRoutes = ["/sign-in", "/sign-up", "/forgot-password", "/reset-password"];
   const protectedRoutes = ["/my-profile", "/library", "/settings"];
   const isAuthRoute = authRoutes.includes(req.nextUrl.pathname);
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    req.nextUrl.pathname.startsWith(route)
-  );
+  const isProtectedRoute = protectedRoutes.some((route) => req.nextUrl.pathname.startsWith(route));
 
   if (req.nextUrl.pathname.startsWith("/api")) {
     return NextResponse.next();
   }
 
-  const token =
-    req.cookies.get("token")?.value ||
-    req.headers.get("authorization")?.split(" ")[1];
+  const token = req.cookies.get("token")?.value || req.headers.get("authorization")?.split(" ")[1];
 
   let isAuthenticated = false;
 
@@ -36,16 +32,13 @@ export async function middleware(req: NextRequest) {
       }
 
       // Verify with backend
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/api/auth/validate`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API}/api/auth/validate`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       isAuthenticated = response.status === 200;
     } catch (error) {
       isAuthenticated = false;
@@ -53,9 +46,7 @@ export async function middleware(req: NextRequest) {
   }
 
   if (isAuthRoute && isAuthenticated) {
-    return NextResponse.redirect(
-      new URL(req.nextUrl.searchParams.get("redirect") || "/", req.url)
-    );
+    return NextResponse.redirect(new URL(req.nextUrl.searchParams.get("redirect") || "/", req.url));
   }
 
   if (isProtectedRoute && !isAuthenticated) {
