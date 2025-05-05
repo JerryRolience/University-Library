@@ -22,7 +22,7 @@ export async function sendEmail(type: EmailType, email: string, data: EmailData 
   } else if (type === "bookReturnConfirmationTemplate") {
     template = TEMPLATES[type](data.fullName || "User", data.bookTitle || "Unknown Book", loginUrl);
   } else if (type === "resetPasswordTemplate") {
-    template = TEMPLATES[type](data.resetUrl);
+    template = TEMPLATES[type](data.resetLink);
   } else {
     template = TEMPLATES[type](data.fullName || "User", loginUrl);
   }

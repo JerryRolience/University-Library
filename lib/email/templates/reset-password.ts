@@ -1,4 +1,4 @@
-export const resetPasswordTemplate = (resetUrl: string) => ({
+export const resetPasswordTemplate = (resetLink: string) => ({
   subject: "Reset Your BookWise Password",
   html: `
       <!DOCTYPE html>
@@ -84,7 +84,7 @@ export const resetPasswordTemplate = (resetUrl: string) => ({
         <p>Click the button below to create a new password:</p>
         
         <div class="button-container">
-          <a href="${resetUrl}" class="button">Reset Password</a>
+          <a href="${resetLink}" class="button">Reset Password</a>
         </div>
         
         <p class="small-text">
@@ -108,7 +108,7 @@ export const resetPasswordTemplate = (resetUrl: string) => ({
       We received a request to reset your BookWise account password.
       
       Please use the following link to reset your password:
-      ${resetUrl}
+      ${resetLink}
       
       This link will expire in 30 minutes. If you didn't request a password reset, 
       you can safely ignore this email.

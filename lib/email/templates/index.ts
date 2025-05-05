@@ -33,6 +33,6 @@ export const TEMPLATES = {
 
   bookReturnConfirmationTemplate: (name: string, bookTitle: string, exploreUrl: string) => bookReturnConfirmationTemplate(name, bookTitle, exploreUrl),
 
-  resetPasswordTemplate: (resetUrl: string) => resetPasswordTemplate(resetUrl),
+  resetPasswordTemplate: (resetLink: string) => resetPasswordTemplate(resetLink),
   // ...other templates
 };
