@@ -9,26 +9,14 @@ import { useState } from "react";
 import { LoadingSpinner } from "../home/LoadingSpinner";
 import { useAuth } from "@/contexts/AuthContext";
 
-export function BorrowBook({
-  bookId,
-  title,
-  author,
-}: {
-  bookId: string;
-  title: string;
-  author: string;
-}) {
+export function BorrowBook({ bookId, title, author }: { bookId: string; title: string; author: string }) {
   const { user } = useAuth();
   const router = useRouter();
   const [isBorrowing, setIsBorrowing] = useState(false);
 
   const triggerWorkflow = async (borrowRecord: any) => {
     try {
-      if (
-        !borrowRecord.data ||
-        !borrowRecord.data.borrowDate ||
-        !borrowRecord.data.dueDate
-      ) {
+      if (!borrowRecord.data || !borrowRecord.data.borrowDate || !borrowRecord.data.dueDate) {
         console.error("Invalid borrow record:", borrowRecord);
         return;
       }
@@ -77,9 +65,7 @@ export function BorrowBook({
       if (!responseData.ok) {
         setIsBorrowing(false);
         toast.error("Borrowing Book failed", {
-          description:
-            responseData.data?.message ||
-            "Something went wrong, please try again.",
+          description: responseData.data?.message || "Something went wrong, please try again.",
           style: { backgroundColor: "red", color: "#fff" },
         });
         return;
@@ -99,7 +85,7 @@ export function BorrowBook({
   };
 
   return (
-    <Button className="book-overview_btn" onClick={handleBorrow}>
+    <Button className="book-overview_btn" onClick={handleBorrow} disabled={!user}>
       <Image src="/icons/book.svg" alt="book" width={20} height={20} />
       <div className="font-bebas-neue text-xl text-dark-100">
         {isBorrowing ? (

@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-  useCallback,
-} from "react";
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchRequest } from "@/lib/api";
 import { AuthContextType, DataBaseBooks, User } from "@/types";
@@ -29,12 +22,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoadingBooks(true);
     setErrorBooks(null);
     try {
-      const response = await fetchRequest(
-        `${process.env.NEXT_PUBLIC_API}/book/get-books`,
-        "GET",
-        undefined,
-        token
-      );
+      const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/book/get-books`, "GET", undefined, token);
 
       if (response.ok) {
         setBooks(response.data || []);
@@ -67,9 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const setAuthCookie = (token: string) => {
-    document.cookie = `token=${token}; path=/; max-age=${60 * 60}; SameSite=Lax${
-      process.env.NODE_ENV === "production" ? "; Secure" : ""
-    }`;
+    document.cookie = `token=${token}; path=/; max-age=${60 * 60}; SameSite=Lax${process.env.NODE_ENV === "production" ? "; Secure" : ""}`;
   };
 
   const clearAuthCookie = () => {
@@ -89,12 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             return;
           }
         } else {
-          const response = await fetchRequest(
-            `${process.env.NEXT_PUBLIC_API}/api/auth/current-user`,
-            "GET",
-            undefined,
-            storedToken
-          );
+          const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/api/auth/current-user`, "GET", undefined, storedToken);
 
           if (response.ok && response.data) {
             setUser(response.data);
@@ -134,11 +115,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => clearInterval(interval);
   }, [token, router]);
 
-  const login = async (
-    newToken: string,
-    newRefreshToken: string,
-    userData: User
-  ) => {
+  const login = async (newToken: string, newRefreshToken: string, userData: User) => {
     localStorage.setItem("token", newToken);
     localStorage.setItem("refreshToken", newRefreshToken);
     setToken(newToken);
@@ -173,18 +150,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (!storedRefreshToken) return false;
 
     try {
-      const response = await fetchRequest(
-        `${process.env.NEXT_PUBLIC_API}/user/refresh-token`,
-        "POST",
-        { refreshToken: storedRefreshToken }
-      );
+      const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/user/refresh-token`, "POST", { refreshToken: storedRefreshToken });
 
       if (response.ok && response.data.accessToken) {
-        login(
-          response.data.accessToken,
-          response.data.refreshToken || storedRefreshToken,
-          response.data.user
-        );
+        login(response.data.accessToken, response.data.refreshToken || storedRefreshToken, response.data.user);
         return true;
       }
       return false;
@@ -197,12 +166,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = async () => {
     try {
       if (token) {
-        await fetchRequest(
-          `${process.env.NEXT_PUBLIC_API}/user/logout`,
-          "GET",
-          undefined,
-          token
-        );
+        await fetchRequest(`${process.env.NEXT_PUBLIC_API}/user/logout`, "GET", undefined, token);
       }
     } catch (error) {
       console.error("Logout error:", error);
