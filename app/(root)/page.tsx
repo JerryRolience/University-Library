@@ -11,7 +11,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 export default function Home() {
   const { books, errorBooks, fetchBooks } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
-  const booksPerPage = 8; // Adjust this as needed
+
+  const booksPerPage = 8;
 
   useEffect(() => {
     fetchBooks();
@@ -50,20 +51,11 @@ export default function Home() {
     <>
       <BookOverview {...books[6]} />
 
-      <SearchBookList
-        title="Latest Books"
-        books={currentBooks}
-        containerClassName="mt-28 ml-5"
-      />
+      <SearchBookList title="Latest Books" books={currentBooks} containerClassName="mt-28 ml-5" />
 
       {/* Pagination Controls */}
       <div className="flex justify-center items-center gap-4 mt-8">
-        <Button
-          variant="ghost"
-          onClick={handlePrevPage}
-          disabled={currentPage === 1}
-          className="gap-1 bg-primary/10  hover:bg-primary/20 text-primary hover:text-primary transition-colors"
-        >
+        <Button variant="ghost" onClick={handlePrevPage} disabled={currentPage === 1} className="gap-1 bg-primary/10  hover:bg-primary/20 text-primary hover:text-primary transition-colors">
           <ChevronLeft className="h-4 w-4" />
           Previous
         </Button>
@@ -72,12 +64,7 @@ export default function Home() {
           Page {currentPage} of {totalPages}
         </span>
 
-        <Button
-          variant="ghost"
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages}
-          className="gap-1 bg-primary/10  hover:bg-primary/20 text-primary hover:text-primary transition-colors"
-        >
+        <Button variant="ghost" onClick={handleNextPage} disabled={currentPage === totalPages} className="gap-1 bg-primary/10  hover:bg-primary/20 text-primary hover:text-primary transition-colors">
           Next
           <ChevronRight className="h-4 w-4" />
         </Button>

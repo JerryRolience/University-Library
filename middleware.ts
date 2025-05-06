@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
   const authRoutes = ["/sign-in", "/sign-up", "/forgot-password", "/reset-password"];
-  const protectedRoutes = ["/my-profile", "/library", "/settings"];
+  const protectedRoutes = ["/my-profile", "/library", "/admin"];
   const isAuthRoute = authRoutes.includes(req.nextUrl.pathname);
   const isProtectedRoute = protectedRoutes.some((route) => req.nextUrl.pathname.startsWith(route));
 

@@ -3,8 +3,10 @@
 import AuthForm from "@/components/home/AuthForm";
 import { signInSchema } from "@/lib/validations";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
+  const router = useRouter();
   return (
     <>
       <section className="auth-form">
@@ -22,7 +24,12 @@ export default function SignInPage() {
               email: "",
               password: "",
             }}
-            onSubmit={() => {}}
+            onSubmit={(data) => {
+              if (data?.user?.role && ["SUPER_ADMIN", "ADMIN"].includes(data?.user?.role)) {
+                router.push("/admin");
+                return;
+              }
+            }}
           />
         </div>
       </section>

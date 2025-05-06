@@ -2,43 +2,23 @@
 
 import { FiEdit2 } from "react-icons/fi";
 import { IoSettingsOutline, IoLogOutOutline } from "react-icons/io5";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { fetchRequest } from "@/lib/api";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
-export function ActionButtons({
-  isLoggingOut,
-  handleLogout,
-  handleProfileEdit,
-  email,
-}: {
-  isLoggingOut: boolean;
-  handleLogout: () => void;
-  handleProfileEdit: () => void;
-  email: string;
-}) {
+export function ActionButtons({ isLoggingOut, handleLogout, handleProfileEdit, email }: { isLoggingOut: boolean; handleLogout: () => void; handleProfileEdit: () => void; email: string }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const router = useRouter();
+  const { user } = useAuth();
 
   function handleAccountRecovery(email: string): void {
     console.log("Account recovery initiated for user ID:", email);
@@ -80,8 +60,7 @@ export function ActionButtons({
       setTimeout(() => handleLogout(), 1500);
     } catch (error) {
       toast.error("Deletion failed", {
-        description:
-          error instanceof Error ? error.message : "Please try again later",
+        description: error instanceof Error ? error.message : "Please try again later",
         style: { backgroundColor: "red", color: "#fff" },
       });
     } finally {
@@ -116,13 +95,23 @@ export function ActionButtons({
               <span className="truncate">Settings</span>
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-56 bg-dark-400 border-dark-300"
-            onInteractOutside={() => setDropdownOpen(false)}
-          >
-            <DropdownMenuLabel className="text-light-100">
-              Account Settings
-            </DropdownMenuLabel>
+          <DropdownMenuContent className="w-56 bg-dark-400 border-dark-300" onInteractOutside={() => setDropdownOpen(false)}>
+            <DropdownMenuLabel className="text-light-100">Account Settings</DropdownMenuLabel>
+
+            {["ADMIN", "SUPER_ADMIN"].includes(user?.role!) && (
+              <>
+                <DropdownMenuSeparator className="bg-dark-300" />
+                <DropdownMenuItem
+                  className="focus:bg-primary-admin/20 focus:text-light-100 cursor-pointer"
+                  onClick={() => {
+                    router.push("/admin");
+                  }}
+                >
+                  <span className="text-blue-100">Admins Page</span>
+                </DropdownMenuItem>
+              </>
+            )}
+
             <DropdownMenuSeparator className="bg-dark-300" />
             <DropdownMenuItem
               className="focus:bg-red-500/20 focus:text-red-400 cursor-pointer"
@@ -143,9 +132,7 @@ export function ActionButtons({
           aria-label="Log out"
         >
           <IoLogOutOutline size={16} className="shrink-0" />
-          <span className="truncate">
-            {isLoggingOut ? "Logging out..." : "Log out"}
-          </span>
+          <span className="truncate">{isLoggingOut ? "Logging out..." : "Log out"}</span>
         </button>
       </div>
 
@@ -157,20 +144,16 @@ export function ActionButtons({
         `}
         >
           <DialogHeader>
-            <DialogTitle className="text-red-400 text-xl sm:text-2xl">
-              Delete Account
-            </DialogTitle>
+            <DialogTitle className="text-red-400 text-xl sm:text-2xl">Delete Account</DialogTitle>
             <DialogDescription className="text-light-300 text-sm sm:text-base">
-              This action cannot be undone. This will permanently delete your
-              account and remove all your data from our servers.
+              This action cannot be undone. This will permanently delete your account and remove all your data from our servers.
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
               <p className="text-sm sm:text-base text-light-200">
-                To confirm, type{" "}
-                <span className="font-bold">DELETE ACCOUNT</span> below:
+                To confirm, type <span className="font-bold">DELETE ACCOUNT</span> below:
               </p>
               <Input
                 value={confirmationText}
@@ -181,14 +164,8 @@ export function ActionButtons({
             </div>
           </div>
 
-          <DialogFooter
-            className={`flex flex-col sm:flex-row gap-2 sm:gap-4 justify-end`}
-          >
-            <Button
-              variant="outline"
-              onClick={handleDialogClose}
-              className={` text-light-100 bg-dark-300 border-dark-300 hover:bg-dark-400 w-full sm:w-auto py-2  `}
-            >
+          <DialogFooter className={`flex flex-col sm:flex-row gap-2 sm:gap-4 justify-end`}>
+            <Button variant="outline" onClick={handleDialogClose} className={` text-light-100 bg-dark-300 border-dark-300 hover:bg-dark-400 w-full sm:w-auto py-2  `}>
               Cancel
             </Button>
             <Button
