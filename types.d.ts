@@ -37,6 +37,10 @@ interface DataBaseBooks {
 }
 
 interface BorrowRecords {
+  BookRating: number;
+  BookDescription: string;
+  BorrowId: string;
+  UserId: string;
   BookId: string;
   BookTitle: string;
   BookCoverUrl: string;
@@ -212,11 +216,14 @@ interface StatusAlertDialogProps {
   };
 }
 
-type ROLES = "ADMIN" | "SUPER_ADMIN" | "USER" | "STUDENT";
+export type ROLES = "ADMIN" | "SUPER_ADMIN" | "USER" | "STUDENT";
+export type STATUS = "BORROWED" | "RETURNED" | "OVERDUE";
 
-interface StatusDropdownProps<T extends string> {
-  currentValue: "ADMIN" | "SUPER_ADMIN" | "USER";
-  onStatusChange: (newValue: ROLES) => void;
+interface StatusDropdownProps {
+  type: "BOOK_REQUEST" | "ALL_USERS";
+  currentValue: ROLES | STATUS;
+  onStatusChange?: (newValue: ROLES) => void;
+  onBookStatusChange?: (newValue: "RETURNED") => void;
   options: DropdownOption[];
   className?: string;
 }

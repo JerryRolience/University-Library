@@ -1,34 +1,23 @@
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { StatusAlertDialogProps } from "@/types";
 import { Spinner } from "./Spinner";
 
-export function StatusAlertDialog({
-  open,
-  onOpenChange,
-  onConfirm,
-  isProcessing,
-  user,
-}: StatusAlertDialogProps & { isProcessing: boolean }) {
+export function StatusAlertDialog({ type, open, onOpenChange, onConfirm, isProcessing, user }: StatusAlertDialogProps & { isProcessing: boolean; type: "ALL_USERS" | "BOOK_REQUEST" }) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="max-w-md rounded-lg border-0 bg-white p-6 shadow-xl">
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-xl font-semibold text-gray-900">
-            Confirm Role Change
-          </AlertDialogTitle>
+          <AlertDialogTitle className="text-xl font-semibold text-gray-900">{type === "ALL_USERS" ? "Confirm Role Change" : "Confirm Book Status Change"}</AlertDialogTitle>
           <AlertDialogDescription className="mt-2 text-gray-600">
-            You're about to change this user's role to{" "}
-            <span className="font-medium text-blue-600">{user.role}</span>. This
-            will affect their permissions immediately.
+            {type === "ALL_USERS" ? (
+              <>
+                You're about to change this user's role to <span className="font-medium text-blue-600">{user.role}</span>. This will affect their permissions immediately.
+              </>
+            ) : (
+              <>
+                You're about to change the book status to <span className="font-medium text-blue-600">{user.role}</span>. This will indicate that the book has been returned.
+              </>
+            )}
           </AlertDialogDescription>
         </AlertDialogHeader>
 

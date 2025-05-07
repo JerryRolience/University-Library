@@ -1,14 +1,5 @@
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  Font,
-  Image,
-  Link,
-} from "@react-pdf/renderer";
-import { BorrowedBook } from "@/types";
+import { Document, Page, Text, View, StyleSheet, Font, Image, Link } from "@react-pdf/renderer";
+import { BorrowedBook, BorrowRecord, BorrowRecords } from "@/types";
 import { formatShortDate, calculateDaysLeft } from "@/lib/util";
 
 // Register fonts
@@ -140,11 +131,7 @@ const styles = StyleSheet.create({
 export const ReceiptPDF = ({ book }: { book: BorrowedBook }) => {
   const daysLeft = calculateDaysLeft(book.borrowRecord.dueDate);
   const isOverdue = daysLeft < 0;
-  const duration = Math.ceil(
-    (new Date(book.borrowRecord.dueDate).getTime() -
-      new Date(book.borrowRecord.borrowDate).getTime()) /
-      (1000 * 60 * 60 * 24)
-  );
+  const duration = Math.ceil((new Date(book.borrowRecord.dueDate).getTime() - new Date(book.borrowRecord.borrowDate).getTime()) / (1000 * 60 * 60 * 24));
 
   return (
     <Document>
@@ -163,9 +150,7 @@ export const ReceiptPDF = ({ book }: { book: BorrowedBook }) => {
 
           <View style={styles.subtitleWrapper}>
             <Text style={styles.subtitle}>Date Issued:</Text>
-            <Text style={styles.subInnerTitle}>
-              {formatShortDate(new Date().toISOString())}
-            </Text>
+            <Text style={styles.subInnerTitle}>{formatShortDate(new Date().toISOString())}</Text>
           </View>
         </View>
 
@@ -194,20 +179,14 @@ export const ReceiptPDF = ({ book }: { book: BorrowedBook }) => {
 
             <View style={styles.col}>
               <Text style={styles.label}>Borrowed on</Text>
-              <Text style={styles.value}>
-                {formatShortDate(book.borrowRecord.borrowDate)}
-              </Text>
+              <Text style={styles.value}>{formatShortDate(book.borrowRecord.borrowDate)}</Text>
             </View>
           </View>
 
           <View style={styles.row}>
             <View style={styles.col}>
               <Text style={styles.label}>Due Date</Text>
-              <Text
-                style={[styles.value, isOverdue ? { color: "#F56565" } : {}]}
-              >
-                {formatShortDate(book.borrowRecord.dueDate)}
-              </Text>
+              <Text style={[styles.value, isOverdue ? { color: "#F56565" } : {}]}>{formatShortDate(book.borrowRecord.dueDate)}</Text>
             </View>
 
             <View style={styles.col}>
@@ -223,15 +202,11 @@ export const ReceiptPDF = ({ book }: { book: BorrowedBook }) => {
           <Text style={styles.sectionTitle}>Terms</Text>
           <View style={styles.termItem}>
             <Text style={styles.termBullet}>•</Text>
-            <Text style={styles.termText}>
-              Please return the book by the due date.
-            </Text>
+            <Text style={styles.termText}>Please return the book by the due date.</Text>
           </View>
           <View style={styles.termItem}>
             <Text style={styles.termBullet}>•</Text>
-            <Text style={styles.termText}>
-              Lost or damaged books may incur replacement costs.
-            </Text>
+            <Text style={styles.termText}>Lost or damaged books may incur replacement costs.</Text>
           </View>
         </View>
 
@@ -239,16 +214,10 @@ export const ReceiptPDF = ({ book }: { book: BorrowedBook }) => {
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>Thank you for using BookWise!</Text>
-          <Link
-            style={styles.footerLink}
-            src="https://university-library-ac9s.vercel.app/"
-          >
+          <Link style={styles.footerLink} src="https://university-library-ac9s.vercel.app/">
             Website: university-library-ac9s.vercel.app
           </Link>
-          <Link
-            style={styles.footerLink}
-            src="mailto:jerryrawlings892@gmail.com"
-          >
+          <Link style={styles.footerLink} src="mailto:jerryrawlings892@gmail.com">
             Email: jerryrawlings892@gmail.com
           </Link>
         </View>

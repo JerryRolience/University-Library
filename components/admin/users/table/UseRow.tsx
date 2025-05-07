@@ -94,7 +94,7 @@ export function UserRow({ user, type, fetchUsers }: { user: any; type: "ALL USER
         <>
           <TableCell className="min-w-[150px]">
             <div className="w-full flex justify-center">
-              <StatusDropdown currentValue={userRole} options={roleOptions} onStatusChange={handleStatusChange} />
+              <StatusDropdown type="ALL_USERS" currentValue={userRole} options={roleOptions} onStatusChange={handleStatusChange} />
             </div>
           </TableCell>
           <TableCell className="text-sm">{user.booksBorrowed}</TableCell>

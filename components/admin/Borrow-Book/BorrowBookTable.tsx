@@ -1,15 +1,9 @@
 "use client";
 
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useCallback, useEffect, useState } from "react";
 import { bookBorrowRecordsTitles } from "@/constants";
-import { BorrowRecords } from "@/types";
+import { BorrowRecords, STATUS } from "@/types";
 import { fetchRequest } from "@/lib/api";
 import { UserTableHeader } from "../users/TableHeader";
 import { TableStateRow } from "../users/table/TableStateRow";
@@ -18,28 +12,21 @@ import { BorrowBookTableRow } from "./BorrowBookTableRow";
 
 export function BorrowBookTable() {
   const [borrowRecords, setBorrowRecords] = useState<BorrowRecords[]>([]);
-  const [status, setStatus] = useState(borrowRecords.map((u) => u.Status));
+  const [status, setStatus] = useState<STATUS[]>(borrowRecords.map((u) => u.Status as STATUS));
   const [loadingRecords, setLoadingRecords] = useState(false);
-  const [errorBooksRecords, setErrorBooksRecords] = useState<string | null>(
-    null
-  );
+  const [errorBooksRecords, setErrorBooksRecords] = useState<string | null>(null);
   const [sortAsc, setSortAsc] = useState(true);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    setStatus(borrowRecords.map((u) => u.Status));
+    setStatus(borrowRecords.map((u) => u.Status as STATUS));
   }, [borrowRecords]);
 
   const fetchBorrowRecords = useCallback(async () => {
     setLoadingRecords(true);
     setErrorBooksRecords(null);
     try {
-      const response = await fetchRequest(
-        `${process.env.NEXT_PUBLIC_API}/book/get-borrow-records`,
-        "GET",
-        undefined,
-        token
-      );
+      const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/book/get-borrow-records`, "GET", undefined, token);
 
       if (response.ok) {
         setBorrowRecords(response.data || []);
@@ -62,11 +49,7 @@ export function BorrowBookTable() {
     }
   }, [fetchBorrowRecords, token]);
 
-  const sortedRecords = [...borrowRecords].sort((a, b) =>
-    sortAsc
-      ? a.BookTitle.localeCompare(b.BookTitle)
-      : b.BookTitle.localeCompare(a.BookTitle)
-  );
+  const sortedRecords = [...borrowRecords].sort((a, b) => (sortAsc ? a.BookTitle.localeCompare(b.BookTitle) : b.BookTitle.localeCompare(a.BookTitle)));
 
   const sortByName = () => {
     setSortAsc(!sortAsc);
@@ -74,23 +57,14 @@ export function BorrowBookTable() {
 
   return (
     <div className="w-full bg-white max-w-full mx-auto rounded-xl shadow border border-gray-200 px-6 pt-6 pb-4">
-      <UserTableHeader
-        sort="Oldest to Recent"
-        title="Borrow Book Requests"
-        sortAsc={sortAsc}
-        sortByName={sortByName}
-        errorUsers={errorBooksRecords}
-      />
+      <UserTableHeader sort="Oldest to Recent" title="Borrow Book Requests" sortAsc={sortAsc} sortByName={sortByName} errorUsers={errorBooksRecords} />
 
       <div className="overflow-x-auto">
         <Table>
           <TableHeader className="h-14 rounded-md">
             <TableRow className="bg-light-300 hover:bg-light-300">
               {bookBorrowRecordsTitles.map((title, index) => (
-                <TableHead
-                  key={index}
-                  className="uppercase text-xs font-semibold text-gray-700"
-                >
+                <TableHead key={index} className="uppercase text-xs font-semibold text-gray-700">
                   {title}
                 </TableHead>
               ))}
@@ -110,9 +84,11 @@ export function BorrowBookTable() {
                   name: book.UserName,
                   email: book.UserEmail,
                   profilePic: book.UserProfilePic,
+                  id: book.UserId,
                 };
                 return (
                   <BorrowBookTableRow
+                    fetchRecords={fetchBorrowRecords}
                     status={status[index]}
                     key={index}
                     book={book}

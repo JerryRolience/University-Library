@@ -30,7 +30,7 @@ export function BorrowBook({ bookId, title, author }: { bookId: string; title: s
           email: user?.email,
           fullName: user?.name,
           bookTitle: title,
-          borrowDate: new Date(borrowRecord.data.borrowDate).toISOString(), // Fixed property name
+          borrowDate: new Date(borrowRecord.data.borrowDate).toISOString(),
           dueDate: new Date(borrowRecord.data.dueDate).toISOString(),
           borrowId: borrowRecord.data.id,
         }),
@@ -47,6 +47,15 @@ export function BorrowBook({ bookId, title, author }: { bookId: string; title: s
   const handleBorrow = async () => {
     try {
       setIsBorrowing(true);
+
+      if (!user) {
+        setIsBorrowing(false);
+        toast.error("Borrowing Book failed", {
+          description: "You can only borrow a book once you've signed in",
+          style: { backgroundColor: "red", color: "#fff" },
+        });
+        return;
+      }
       const uri = `${process.env.NEXT_PUBLIC_API}/book/borrow-book`;
       const data = { bookId };
       const token = localStorage.getItem("token");
@@ -85,7 +94,7 @@ export function BorrowBook({ bookId, title, author }: { bookId: string; title: s
   };
 
   return (
-    <Button className="book-overview_btn" onClick={handleBorrow} disabled={!user}>
+    <Button className="book-overview_btn" onClick={handleBorrow}>
       <Image src="/icons/book.svg" alt="book" width={20} height={20} />
       <div className="font-bebas-neue text-xl text-dark-100">
         {isBorrowing ? (
