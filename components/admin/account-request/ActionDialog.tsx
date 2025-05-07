@@ -68,10 +68,9 @@ export function ActionDialog({ type, open, onOpenChange, user, fetchUsers, handl
       });
       setIsLoading(false);
 
-      await fetchUsers?.();
-      handleUpdateUsers?.();
       await handleWorkflowTrigger(config.workflow, user.email, `${user.name}`);
 
+      handleUpdateUsers?.();
       onOpenChange(false); // Auto-close after success
     } catch (error) {
       console.error(error);
