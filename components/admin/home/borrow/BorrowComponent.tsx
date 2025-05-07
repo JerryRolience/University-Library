@@ -21,19 +21,13 @@ export function BorrowComponent() {
     setLoadingBooks(true);
 
     try {
-      const response = await fetchRequest(
-        `${process.env.NEXT_PUBLIC_API}/book/get-borrow-records`,
-        "GET",
-        undefined,
-        token
-      );
+      const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/book/get-borrow-records`, "GET", undefined, token);
 
       if (response.ok) {
         setBorrowRecords(response.data || []);
       } else {
         toast.error("Failed to load borrow records", {
-          description:
-            response.data?.message || "Something went wrong, please try again.",
+          description: response.data?.message || "Something went wrong, please try again.",
           style: { backgroundColor: "red", color: "#fff" },
         });
       }
@@ -62,7 +56,7 @@ export function BorrowComponent() {
 
   const displayedBooks = borrowRecords.slice(0, 3);
 
-  if (borrowRecords.length === 0) {
+  if (!loadingBooks && borrowRecords.length === 0) {
     return <LeftNoResult type="Borrow Records" />;
   }
 
@@ -70,10 +64,7 @@ export function BorrowComponent() {
     <div className="flex-1 bg-white rounded-2xl shadow p-6 relative overflow-hidden">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold mb-4">Borrow Records</h3>
-        <Button
-          onClick={() => router.push("/admin/book-requests")}
-          className="text-primary-admin bg-[#F8F8FF] hover:bg-primary-admin/15"
-        >
+        <Button onClick={() => router.push("/admin/book-requests")} className="text-primary-admin bg-[#F8F8FF] hover:bg-primary-admin/15">
           View All
         </Button>
       </div>
@@ -88,9 +79,7 @@ export function BorrowComponent() {
         ))}
 
         {/* Gradient overlay for the bottom */}
-        {displayedBooks.length > 2 && (
-          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none" />
-        )}
+        {displayedBooks.length > 2 && <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none" />}
       </div>
     </div>
   );

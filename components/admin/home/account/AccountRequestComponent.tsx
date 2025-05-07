@@ -44,7 +44,7 @@ export function AccountRequestComponent() {
     });
   }
 
-  if (accountRequestUsers.length <= 0) {
+  if (!loadingUsers && accountRequestUsers.length === 0) {
     return <LeftNoResult type="Account Requests" />;
   }
 
@@ -52,10 +52,7 @@ export function AccountRequestComponent() {
     <div className="flex-1 bg-white rounded-2xl shadow p-6 relative overflow-hidden">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold mb-4">Account Requests</h3>
-        <Button
-          onClick={() => router.push("/admin/account-requests")}
-          className="text-primary-admin bg-[#F8F8FF] hover:bg-primary-admin/15"
-        >
+        <Button onClick={() => router.push("/admin/account-requests")} className="text-primary-admin bg-[#F8F8FF] hover:bg-primary-admin/15">
           View All
         </Button>
       </div>
@@ -82,9 +79,7 @@ export function AccountRequestComponent() {
                     />
                   ) : (
                     <Avatar className="w-full h-full">
-                      <AvatarFallback
-                        className={`${bg} ${text} font-bold text-xl flex items-center justify-center w-full h-full`}
-                      >
+                      <AvatarFallback className={`${bg} ${text} font-bold text-xl flex items-center justify-center w-full h-full`}>
                         {user.name
                           ? user.name
                               .split(" ")

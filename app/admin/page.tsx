@@ -6,6 +6,7 @@ import { BorrowComponent } from "@/components/admin/home/borrow/BorrowComponent"
 import { StatCard } from "@/components/admin/home/StatCard";
 import { Spinner } from "@/components/home/Spiner";
 import { Button } from "@/components/ui";
+import { useAuth } from "@/contexts/AuthContext";
 import { fetchRequest } from "@/lib/api";
 import { DataBaseBooks } from "@/types";
 import { Plus } from "lucide-react";
@@ -14,7 +15,7 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const DashboardPage = () => {
-  const [books, setBooks] = useState<DataBaseBooks[]>([]);
+  const { books, fetchBooks, loadingBooks } = useAuth();
   const [analytics, setAnalytics] = useState<{
     borrowedBooksCount: number;
     totalUsersCount: number;
@@ -34,7 +35,6 @@ const DashboardPage = () => {
       booksDelta: 0,
     },
   });
-  const [loadingBooks, setLoadingBooks] = useState(false);
   const [loadingAnalytics, setLoadingAnalytics] = useState(false);
   const [token, setToken] = useState<string | null>(null);
 
@@ -72,31 +72,6 @@ const DashboardPage = () => {
     }
   }, [token]);
 
-  const fetchBooks = useCallback(async () => {
-    if (!token) return;
-
-    setLoadingBooks(true);
-
-    try {
-      const response = await fetchRequest(`${process.env.NEXT_PUBLIC_API}/book/get-books`, "GET", undefined, token);
-
-      if (response.ok) {
-        setBooks(response.data || []);
-      } else {
-        toast.error(response.data?.message || "Failed to load books", {
-          description: "Something went wrong, please try again.",
-          style: { backgroundColor: "red", color: "#fff" },
-        });
-      }
-    } catch (error) {
-      toast.error("An unexpected error occurred", {
-        style: { backgroundColor: "red", color: "#fff" },
-      });
-    } finally {
-      setLoadingBooks(false);
-    }
-  }, [token]);
-
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     setToken(storedToken);
@@ -104,10 +79,9 @@ const DashboardPage = () => {
 
   useEffect(() => {
     if (token) {
-      fetchBooks();
       fetchAnalytics();
+      fetchBooks();
     } else {
-      setBooks([]);
       setAnalytics({
         borrowedBooksCount: 0,
         totalUsersCount: 0,
@@ -119,7 +93,7 @@ const DashboardPage = () => {
         },
       });
     }
-  }, [fetchBooks, fetchAnalytics, token]);
+  }, [fetchAnalytics, token]);
 
   return (
     <div>
@@ -156,11 +130,7 @@ const DashboardPage = () => {
             <h3 className="text-lg font-medium">Add New Book</h3>
           </div>
 
-          {loadingBooks && <Spinner />}
-
-          {books.slice(0, 7).map((book, index) => (
-            <BookItem key={index} book={book} />
-          ))}
+          {loadingBooks ? <Spinner /> : books && books.length > 0 ? books.slice(0, 7).map((book) => <BookItem key={book.id} book={book} />) : <div className="text-center py-4">No books found</div>}
 
           <div className="absolute -bottom-32 left-0 right-0 h-44 bg-gradient-to-t from-white to-transparent pointer-events-none" />
         </div>
