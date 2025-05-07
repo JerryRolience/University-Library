@@ -37,7 +37,7 @@ const roleOptions: DropdownOption[] = [
   },
 ];
 
-export function UserRow({ user, type, fetchUsers }: { user: any; type: "ALL USERS" | "ACCOUNT REQUEST"; fetchUsers: () => Promise<void> }) {
+export function UserRow({ user, type, fetchUsers, handleUpdateUsers }: { user: any; type: "ALL USERS" | "ACCOUNT REQUEST"; fetchUsers: () => Promise<void>; handleUpdateUsers?: () => void }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [userRole, setUserRole] = useState(user.role);
 
@@ -109,7 +109,7 @@ export function UserRow({ user, type, fetchUsers }: { user: any; type: "ALL USER
         {openDialog && <ViewCardDialog IDCard={user.universityCard} open={openDialog} onOpenChange={setOpenDialog} />}
       </TableCell>
       <TableCell className="pr-4">
-        <ActionButtons type={type} user={user} fetchUsers={fetchUsers} />
+        <ActionButtons type={type} user={user} fetchUsers={fetchUsers} handleUpdateUsers={handleUpdateUsers} />
       </TableCell>
     </TableRow>
   );

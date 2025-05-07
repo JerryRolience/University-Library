@@ -8,13 +8,14 @@ interface Prop {
   type: "ALL USERS" | "ACCOUNT REQUEST";
   user: any;
   fetchUsers?: () => Promise<void>;
+  handleUpdateUsers?: () => void;
   book?: {
     bookId: string;
     bookTitle: string;
   };
 }
 
-export function ActionButtons({ type, user, fetchUsers, book }: Prop) {
+export function ActionButtons({ type, user, fetchUsers, book, handleUpdateUsers }: Prop) {
   const allUsers = type === "ALL USERS";
   const [alertType, setAlertType] = useState<"Delete User" | null>(null);
 
@@ -52,6 +53,7 @@ export function ActionButtons({ type, user, fetchUsers, book }: Prop) {
           }}
           user={user}
           fetchUsers={fetchUsers}
+          handleUpdateUsers={handleUpdateUsers}
         />
       )}
 

@@ -7,9 +7,19 @@ import { UserTableProps } from "@/types";
 import { UserTableHeader } from "../TableHeader";
 import { TableStateRow } from "./TableStateRow";
 import { UserRow } from "./UseRow";
+import { useUserContext } from "@/contexts/UserContext";
+import { useState } from "react";
 
-export function TableComponent({ initialUsers, type, title, sort, sortByName, sortAsc, loadingUsers, errorUsers, fetchUsers }: UserTableProps) {
+export function TableComponent({ initialUsers, type, title, sort, sortByName, sortAsc, loadingUsers, errorUsers }: UserTableProps) {
+  const { users, fetchUsers } = useUserContext();
+  const [accountUsers, setAccountUsers] = useState(initialUsers);
   const commonHeaders = getUserTableHeaders(type);
+
+  const handleUpdateUsers = async () => {
+    await fetchUsers();
+    const accountRequestUsers = users.filter((u) => u.status === "PENDING");
+    setAccountUsers(accountRequestUsers);
+  };
 
   return (
     <div className="w-full bg-white max-w-full mx-auto rounded-xl shadow border border-gray-200 px-6 pt-6 pb-4">
@@ -32,10 +42,10 @@ export function TableComponent({ initialUsers, type, title, sort, sortByName, so
               <TableStateRow message={<Spinner />} />
             ) : errorUsers ? (
               <TableStateRow message={errorUsers} isError />
-            ) : initialUsers.length === 0 ? (
+            ) : accountUsers.length === 0 ? (
               <TableStateRow message="No Records found" />
             ) : (
-              initialUsers.map((user, index) => <UserRow key={index} user={user} type={type} fetchUsers={fetchUsers} />)
+              accountUsers.map((user, index) => <UserRow key={index} user={user} type={type} fetchUsers={fetchUsers} handleUpdateUsers={handleUpdateUsers} />)
             )}
           </TableBody>
         </Table>

@@ -234,6 +234,7 @@ interface ActionDialogProps {
   onOpenChange: (open: boolean) => void;
   user: any;
   fetchUsers?: () => Promise<void>;
+  handleUpdateUsers?: () => void;
 }
 
 interface DeleteAlertDialogProps {
